@@ -12,7 +12,7 @@ export default function Signup() {
   const [errorEmail, setErrorEmail] = useState('')
   const [errorPassword, setErrorPassword] = useState('')
 
-  // Récupération de ce qui est tapé dans les champs email et mdp
+  // Récupération de ce qui est tapé dans les champs email et mdp, gestion convenable en bloquant le comportement
   function handleChangeFirstName(e) {
     e.preventDefault()
     setFieldFirstName(e.target.value)

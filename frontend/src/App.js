@@ -1,30 +1,19 @@
 import './App.css'
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
-import Login from './pages/Login'
-import Signup from './pages/Signup'
-import Error404 from './pages/Error'
+import { BrowserRouter } from 'react-router-dom'
+import Header from './components/Header'
+import Main from './components/Main'
+import Footer from './components/Footer'
+import { Container } from './utils/container'
 
+// Application de la page qui affiche chaque composant
 export default function App() {
   return (
     <BrowserRouter>
-      <header>
-        <p>Logo</p>
-        <nav>
-          <Link to="/login">Connexion</Link>
-          <Link to="/signup">Inscription</Link>
-        </nav>
-      </header>
-      <main>
-        <Switch>
-          <Route exact path="/" component={Login} />
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
-          <Route component={Error404} />
-        </Switch>
-      </main>
-      <footer>
-        <p>Footer</p>
-      </footer>
+      <Container as="section">
+        <Header />
+        <Main />
+        <Footer />
+      </Container>
     </BrowserRouter>
   )
 }
