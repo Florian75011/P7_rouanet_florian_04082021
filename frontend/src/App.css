@@ -1,0 +1,44 @@
+* {
+  box-sizing: border-box;
+}
+* body {
+  font-size: large;
+}
+* main {
+  padding: 20px 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+* h2 {
+  color: rgba(218, 223, 225, 0.8);
+}
+* p {
+  color: rgba(0, 0, 255, 0.6);
+}
+* form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+}
+* input {
+  display: block;
+  padding: 10px;
+  font-size: inherit;
+  width: 100%;
+}
+* button {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: inherit;
+  padding: 10px;
+}
+* .form-error {
+  margin: 0;
+  margin-top: 5px;
+  padding: 10px;
+  color: rgba(255, 0, 0, 0.6);
+}
+* input + input, * .form-error + input, * button {
+  margin-top: 10px;
+}/*# sourceMappingURL=App.css.map */

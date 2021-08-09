@@ -1,0 +1,42 @@
+// Code couleurs de Groupomania
+$primary: rgba(0, 0, 255, 0.6) // Bleu
+$secondary: rgba(255, 0, 0, 0.6) // Rouge
+$tertiary: rgba(218, 223, 225, 0.8) // Gris
+
+*
+  box-sizing: border-box
+
+  body
+    font-size: large
+
+  main
+    padding: 20px 30px
+    max-width: 900px
+    margin: 0 auto
+
+  h2
+    color: $tertiary
+
+  p
+    color: $primary
+
+  form
+    display: flex
+    flex-direction: column
+    max-width: 500px
+  input
+    display: block
+    padding: 10px
+    font-size: inherit
+    width: 100%
+  button
+    width: fit-content
+    font-size: inherit
+    padding: 10px
+  .form-error
+    margin: 0
+    margin-top: 5px
+    padding: 10px
+    color: $secondary
+  input+input, .form-error+input, button
+    margin-top: 10px

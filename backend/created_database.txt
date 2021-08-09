@@ -1,0 +1,9 @@
+Username: ETNYDzcq3G
+
+Database name: ETNYDzcq3G
+
+Password: 4mhonqgKWP
+
+Server: remotemysql.com
+
+Port: 3306
