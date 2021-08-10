@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
 
 export default function Login() {
@@ -47,7 +48,7 @@ export default function Login() {
     return success
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (canSubmit()) {
@@ -55,8 +56,9 @@ export default function Login() {
         email: fieldEmail,
         password: fieldPassword,
       }
-      console.log(body)
       // Envoie serveur:
+      const result = await fetchPost('/api/auth/login', body);
+      console.log(result)
     }
   }
 

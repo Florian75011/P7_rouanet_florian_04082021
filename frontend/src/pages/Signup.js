@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fetchGet, fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
 
 export default function Signup() {
@@ -74,7 +75,7 @@ export default function Signup() {
   }
 
   // Une fois que l'on peut soummetre, récupération de toutes les données
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (canSubmit()) {
@@ -84,23 +85,14 @@ export default function Signup() {
         email: fieldEmail,
         password: fieldPassword,
       }
-      console.log(body)
-      // Envoie serveur:
-      var myHeaders = new Headers()
-      myHeaders.append('Content-Type', 'application/json')
-
-      let requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: body,
-      }
-      fetch('api/user/signup', requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log('error', error))
+      // Envoie au serveur, cible la création de compte:
+      const result = await fetchPost('/api/auth/signup', body);
+      console.log(result);
+      // Redirection de l'utilisateur inscrit:
     }
   }
 
+  // Rendering HTML & React
   return (
     <>
       <h2>Inscription</h2>

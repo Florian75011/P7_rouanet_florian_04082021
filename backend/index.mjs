@@ -1,16 +1,17 @@
 import express from 'express'
-import signUp from './controllers/user.mjs'
 import cors from 'cors'
-import helmet from "helmet"
+import helmet from 'helmet'
+import { sqlQuery } from './DB/DB.mjs'
+import { initTables } from './DB/init.mjs'
+import { signUp, logIn, checkAuthParams } from './routes/auth.mjs'
 
-// import helmet from "helmet";
 // import dotenv from "dotenv";
 
 // dotenv.config(); // Variable d'environnement
 
 const app = express()
 app.use(express.json()) // Permet de recevoir des corps de requête en JSON
-app.use(helmet()); // Module de sécurité évitant certaines formes d'attaques informatiques courantes
+app.use(helmet()) // Module de sécurité évitant certaines formes d'attaques informatiques courantes
 app.use(cors())
 // app.use((req, res, next) => {
 //   res.setHeader('Access-Control-Allow-Origin', '*') // Tout le monde a le droit d'accéder à l'API
@@ -31,10 +32,11 @@ app.use(cors())
 // app.use("/images", express.static(path.join(__dirname, "images"))); // Indique que le dossier possède des fichiers statiques
 
 // Création de la route API
-app.get('/test', (req, res) => {
-  res.json('coucou')
-})
-app.post('/api/user/signup', signUp)
+app.post('/api/auth/signup', checkAuthParams, signUp);
+app.post('/api/auth/login', checkAuthParams, logIn);
 
 // Connexion au port backend
-app.listen(8080, () => console.log('Serveur actif sur le port ' + 8080)) // Le serveur Node va tourner continuellement
+app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement
+
+// Création des tables
+initTables()
