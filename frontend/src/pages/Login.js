@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useHistory } from 'react-router'
 import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
 
@@ -8,6 +9,8 @@ export default function Login() {
   const [fieldPassword, setFieldPassword] = useState('')
   const [errorEmail, setErrorEmail] = useState('')
   const [errorPassword, setErrorPassword] = useState('')
+
+  const history = useHistory()
 
   // Récupération de ce qui est tapé dans les champs email et mdp
   function handleChangeEmail(e) {
@@ -58,11 +61,11 @@ export default function Login() {
       }
       // Envoie serveur:
       const result = await fetchPost('/api/auth/login', body)
-        console.log(result)
-        
-          // console.log(res)
-          // localStorage.setItem('usertoken', JSON.stringify(res))
-          // window.location.reload(false)
+      console.log(result)
+      if (result.status === 200) {
+        localStorage.setItem('accessToken', JSON.stringify(result.token))
+        history.push('/posts')
+      }
     }
   }
 

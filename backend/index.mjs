@@ -4,6 +4,8 @@ import helmet from 'helmet'
 import { sqlQuery } from './DB/DB.mjs'
 import { initTables } from './DB/init.mjs'
 import { signUp, logIn, checkAuthParams } from './routes/auth.mjs'
+import { auth } from './middlewares/auth.mjs'
+import { test } from './routes/post.mjs'
 
 // import dotenv from "dotenv";
 
@@ -32,8 +34,9 @@ app.use(cors())
 // app.use("/images", express.static(path.join(__dirname, "images"))); // Indique que le dossier possède des fichiers statiques
 
 // Création de la route API
-app.post('/api/auth/signup', checkAuthParams, signUp);
-app.post('/api/auth/login', checkAuthParams, logIn);
+app.post('/api/auth/signup', checkAuthParams, signUp)
+app.post('/api/auth/login', checkAuthParams, logIn)
+app.get('/api/post', auth, test)
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

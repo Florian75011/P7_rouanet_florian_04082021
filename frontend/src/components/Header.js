@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import imgHeader from '../assets/icon-above-font.png'
 import colors from '../colors'
 
@@ -35,13 +35,20 @@ const HeaderSC = styled.header`
   }
 `
 
-// Return est la fonction moderne qui gère l'affichage (rendering)
+// Momment permtinent où la page doit se mettre à jour (changement d'URL de la page)
 export default function Header(props) {
-  const token = localStorage.usertoken
+  const history = useHistory()
+  const [token, setToken] = useState(localStorage.accessToken)
+  history.listen((location, action) => {
+    setToken(localStorage.accessToken)
+  })
+
   function logOut() {
-    localStorage.removeItem("usertoken")
-    window.location.reload(false)
+    localStorage.removeItem('accessToken')
+    history.push('/login')
   }
+
+  // Return est la fonction moderne qui gère l'affichage (rendering)
   return (
     <HeaderSC textColor={colors.primary}>
       <div>
@@ -49,9 +56,23 @@ export default function Header(props) {
       </div>
       <nav>
         <p>Notre forum intranet</p>
-        {!token && <button><Link to="/">Connexion</Link></button>}
-        {!token && <button><Link to="/signup">Inscription</Link></button>}
-        {token && <button><Link to="/" onClick={() => logOut()}>Déconnexion</Link></button>}
+        {!token && (
+          <button>
+            <Link to="/">Connexion</Link>
+          </button>
+        )}
+        {!token && (
+          <button>
+            <Link to="/signup">Inscription</Link>
+          </button>
+        )}
+        {token && (
+          <button>
+            <Link to="/" onClick={() => logOut()}>
+              Déconnexion
+            </Link>
+          </button>
+        )}
       </nav>
     </HeaderSC>
   )

@@ -14,7 +14,7 @@ export default function Signup() {
   const [errorEmail, setErrorEmail] = useState('')
   const [errorPassword, setErrorPassword] = useState('')
 
-  const router = useHistory()
+  const history = useHistory()
 
   // Récupération de ce qui est tapé dans les champs email et mdp, gestion convenable en bloquant le comportement
   function handleChangeFirstName(e) {
@@ -95,7 +95,7 @@ export default function Signup() {
       switch (result.status) {
         case 201:
           console.log('Redirection')
-          router.push('/login')
+          history.push('/login')
           break
         case 400:
           console.log('Erreur')

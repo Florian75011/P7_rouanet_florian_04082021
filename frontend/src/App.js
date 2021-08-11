@@ -8,10 +8,10 @@ import { Container } from './utils/container'
 // Application de la page qui affiche chaque composant
 export default function App() {
   return (
-      <Container as="section">
-        <Header />
-        <Main />
-        <Footer />
-      </Container>
+    <Container as="section">
+      <Header />
+      <Main />
+      <Footer />
+    </Container>
   )
 }
