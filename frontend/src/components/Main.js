@@ -3,19 +3,25 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import Error404 from '../pages/Error'
 import { Switch, Route } from 'react-router-dom'
+import Home from './Home'
 
 // CSS dans SASS
 
 // Switch gère les routes indépandantes l'une de l'autre et fait la vérif. de page fonctionelle
 export default function Main() {
+  const token = localStorage.usertoken
   return (
     <main>
-      <Switch>
-        <Route exact path="/" component={Login} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
-        <Route component={Error404} />
-      </Switch>
+      {!token ? (
+        <Switch>
+          <Route exact path="/" component={Login} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={Signup} />
+          <Route component={Error404} />
+        </Switch>
+      ) : (
+        <Route exact path="/" component={Home} />
+      )}
     </main>
   )
 }

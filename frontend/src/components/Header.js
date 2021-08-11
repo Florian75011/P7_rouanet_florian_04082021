@@ -37,15 +37,21 @@ const HeaderSC = styled.header`
 
 // Return est la fonction moderne qui gère l'affichage (rendering)
 export default function Header(props) {
+  const token = localStorage.usertoken
+  function logOut() {
+    localStorage.removeItem("usertoken")
+    window.location.reload(false)
+  }
   return (
     <HeaderSC textColor={colors.primary}>
       <div>
         <img src={imgHeader} alt="" />
       </div>
       <nav>
-        <p>Forum intranet</p>
-        <button><Link to="/login">Connexion</Link></button>
-        <button><Link to="/signup">Inscription</Link></button>
+        <p>Notre forum intranet</p>
+        {!token && <button><Link to="/">Connexion</Link></button>}
+        {!token && <button><Link to="/signup">Inscription</Link></button>}
+        {token && <button><Link to="/" onClick={() => logOut()}>Déconnexion</Link></button>}
       </nav>
     </HeaderSC>
   )

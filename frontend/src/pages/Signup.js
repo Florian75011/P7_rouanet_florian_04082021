@@ -1,10 +1,10 @@
-import { Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router'
 import { useState } from 'react'
 import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
 
 export default function Signup() {
-  // Variables contenants nos champs et nos erreurs
+  // Variables contenants nos champs et nos erreurs - hooks
   const [fieldFirstName, setFieldFirstName] = useState('')
   const [fieldLastName, setFieldLastName] = useState('')
   const [fieldEmail, setFieldEmail] = useState('')
@@ -13,6 +13,8 @@ export default function Signup() {
   const [errorLastName, setErrorLastName] = useState('')
   const [errorEmail, setErrorEmail] = useState('')
   const [errorPassword, setErrorPassword] = useState('')
+
+  const router = useHistory()
 
   // Récupération de ce qui est tapé dans les champs email et mdp, gestion convenable en bloquant le comportement
   function handleChangeFirstName(e) {
@@ -90,17 +92,17 @@ export default function Signup() {
       const result = await fetchPost('/api/auth/signup', body)
       console.log(result)
       // Redirection de l'utilisateur inscrit:
-      // switch (result.status) {
-      //   case 201:
-      //     console.log('Redirection');
-      //     <Redirect to="/login" />
-      //     break
-      //   case 400:
-      //     console.log('Erreur');
-      //     break
-      //   default:
-      //     console.log('Erreur');
-      // }
+      switch (result.status) {
+        case 201:
+          console.log('Redirection')
+          router.push('/login')
+          break
+        case 400:
+          console.log('Erreur')
+          break
+        default:
+          console.log('Erreur')
+      }
     }
   }
 

@@ -106,27 +106,6 @@ export async function logIn(req, res, next) {
     } else {
       res.status(400).json({ message: 'Identifiants invalides' })
     }
-    // const searchUser = await User.find({}).lean() // Chercher les utilisateurs
-    // const userConnected = searchUser.find(function (user) {
-    //   if (bcrypt.compareSync(req.body.email, user.email)) return user
-    //   return false
-    // })
-    // // console.log(userConnected);
-    // if (!userConnected) {
-    //   return res.status(400).json({ message: 'Utilisateur introuvable' })
-    // }
-    // if (!bcrypt.compareSync(req.body.password, userConnected.password)) {
-    //   return res.status(400).json({ message: 'Utilisateur introuvable' })
-    // }
-    // // Créer le token, et envoyer une réponse
-    // const obj = {
-    //   // Créer un objet prenant en compte un userId avec le résultat du searchUser + le token secret
-    //   userId: '' + userConnected._id, // Contenu d'un jeton: user de la doc API + ID de MongoDB
-    //   token: jwt.sign({ userId: userConnected._id }, process.env.TOKEN_SECRET, {
-    //     expiresIn: '24h',
-    //   }), // L'utilisateur existe vraiment, donc on lui renvoie un jeton/token ; Crypte information pour la décrypter ensuite
-    // }
-    // res.status(200).json(obj)
   } catch (err) {
     console.log(err)
     res.status(500).json({ message: "Une erreur s'est produite" }) // Ne pas l'identifier précisémment pour ne pas aider les pirates informatiques

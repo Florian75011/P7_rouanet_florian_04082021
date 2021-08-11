@@ -57,8 +57,12 @@ export default function Login() {
         password: fieldPassword,
       }
       // Envoie serveur:
-      const result = await fetchPost('/api/auth/login', body);
-      console.log(result)
+      const result = await fetchPost('/api/auth/login', body)
+        console.log(result)
+        
+          // console.log(res)
+          // localStorage.setItem('usertoken', JSON.stringify(res))
+          // window.location.reload(false)
     }
   }
 
