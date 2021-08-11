@@ -1,5 +1,6 @@
+import { Redirect } from 'react-router-dom'
 import { useState } from 'react'
-import { fetchGet, fetchPost } from '../utils/fetch'
+import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
 
 export default function Signup() {
@@ -86,9 +87,20 @@ export default function Signup() {
         password: fieldPassword,
       }
       // Envoie au serveur, cible la création de compte:
-      const result = await fetchPost('/api/auth/signup', body);
-      console.log(result);
+      const result = await fetchPost('/api/auth/signup', body)
+      console.log(result)
       // Redirection de l'utilisateur inscrit:
+      // switch (result.status) {
+      //   case 201:
+      //     console.log('Redirection');
+      //     <Redirect to="/login" />
+      //     break
+      //   case 400:
+      //     console.log('Erreur');
+      //     break
+      //   default:
+      //     console.log('Erreur');
+      // }
     }
   }
 
