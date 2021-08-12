@@ -44,25 +44,21 @@ export default function PostCreate() {
 
     if (canSubmit()) {
       const body = {
+        userId: localStorage.userId,
         title: fieldTitle,
         text: fieldText,
       }
       // Envoie au serveur, cible la création de compte:
-      console.log(body)
-      //   const result = await fetchPost('/api/user/profile', body)
-      //   console.log(result)
-      //   // Redirection de l'utilisateur inscrit:
-      //   switch (result.status) {
-      //     case 200:
-      //       console.log('Redirection')
-      //       history.push('/')
-      //       break
-      //     case 400:
-      //       console.log('Erreur')
-      //       break
-      //     default:
-      //       console.log('Erreur')
-      //   }
+      console.log(localStorage.userId)
+      await fetchPost('/api/post', body)
+        //   // Redirection de l'utilisateur inscrit:
+        .then((res) => {
+          window.location.reload(false)
+          console.log(res.data)
+        })
+        .catch((error) => {
+          throw error
+        })
     }
   }
 
@@ -82,7 +78,6 @@ export default function PostCreate() {
           onChange={handleChangeText}
         />
         {errorText && <p className="form-error">{errorText}</p>}
-
         <button onClick={handleSubmit}>Envoyer votre publication</button>
       </form>
     </Loader>

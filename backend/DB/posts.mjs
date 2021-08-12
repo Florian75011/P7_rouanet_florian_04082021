@@ -45,3 +45,31 @@ export async function getAllPosts(fields = defaultFields) {
     throw err
   }
 }
+
+// Créer la fonction de POST d'une nouvelle publication qui sera appelée dans le fichier route/post.mjs pour faire chaque post (MYSQL)
+export async function postsCreate(userId, title, text) {
+  try {
+    const result = await sqlQuery(
+      `INSERT INTO ${tableName} (post_user_id, post_title, post_text)
+      VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(text)})`
+    )
+    return result.insertId
+  } catch (err) {
+    throw err
+  }
+}
+
+/*
+result.insertId
+export async function postsCreate(newPost) {
+  try {
+    const rows= await sqlQuery(
+      `INSERT INTO ${tableName} (post_user_id, post_title, post_text)
+      VALUES (${sqlEscape(newPost.userId)}, ${sqlEscape(newPost.title)}, ${sqlEscape(newPost.text)}`
+    )
+    return result.insertId
+  } catch (err) {
+    throw err
+  }
+}
+*/

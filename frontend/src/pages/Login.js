@@ -64,6 +64,7 @@ export default function Login() {
       console.log(result)
       if (result.status === 200) {
         localStorage.setItem('accessToken', JSON.stringify(result.token))
+        localStorage.setItem('userId', JSON.stringify(result.userId))
         history.push('/')
       }
     }
