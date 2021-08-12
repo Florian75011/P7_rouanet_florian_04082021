@@ -5,7 +5,6 @@ dotenv.config()
 
 // Fonction d'authentification globale afin de sécuriser chaque route
 export function auth(req, res, next) {
-  console.log('inAuth', req.headers)
   // Export rend accessible la fonction dans tout le dossier
   try {
     let isConnected = false // Variable reste sur faux à la base
@@ -18,6 +17,7 @@ export function auth(req, res, next) {
       const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET) // Jwt vérifie le token pour le réutiliser
       if (decodedToken != undefined) {
         isConnected = true // En cas de bon fonctionnement on se connecte sinon cela renvoie un statut d'erreur
+        req.accessToken = token
       }
     }
     if (isConnected) {

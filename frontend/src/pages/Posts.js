@@ -1,15 +1,22 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
+import Loader from '../components/Loader'
 import { fetchGet } from '../utils/fetch'
 
 export default function Posts() {
   const history = useHistory()
+  const [displayPage, setDisplayPage] = useState(false)
+  const [posts, setPosts] = useState([])
+
+  // Gestion de l'affichage des posts du site
   useEffect(() => {
     async function loadPosts() {
-      console.log('useEffect')
+      // On reçoit des données quand la réponse est ok
       const result = await fetchGet('/api/post')
       if (result.status === 200) {
-        console.log(result.message)
+        console.log(result.data)
+        setPosts(result.data)
+        setDisplayPage(true)
       } else {
         // Redirection du non-authentifié en page connnexion
         if (result.status === 401) {
@@ -19,6 +26,31 @@ export default function Posts() {
       }
     }
     loadPosts()
-  }, []) // lancer ceci seulement au chargement de la page
-  return <div>Bienvenue sur le forum de notre boîte</div>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []) // lancer ceci seulement au chargement de la page après vérif (protection frontend)
+
+  function handleCreatePost() {
+    history.push("/create_post")
+  }
+  
+  return (
+    <Loader loadOn={displayPage === true}>
+      <div>Bienvenue sur le forum de notre boîte</div>
+      <button onClick={handleCreatePost}>Créer une publication</button>
+      <div>
+        {posts.map((post) => {
+          return (
+            <div key={post.id}>
+              <h2>{post.title}</h2>
+              <h2>
+                {post.userFirstName} {post.userLastName}
+              </h2>
+              <time>{post.creationDate}</time>
+              <p>{post.text}</p>
+            </div>
+          )
+        })}
+      </div>
+    </Loader>
+  )
 }

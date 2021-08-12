@@ -5,7 +5,8 @@ import { sqlQuery } from './DB/DB.mjs'
 import { initTables } from './DB/init.mjs'
 import { signUp, logIn, checkAuthParams } from './routes/auth.mjs'
 import { auth } from './middlewares/auth.mjs'
-import { test } from './routes/post.mjs'
+import { getPostsList } from './routes/post.mjs'
+import { getProfile, setProfile } from './routes/user.mjs'
 
 // import dotenv from "dotenv";
 
@@ -36,7 +37,9 @@ app.use(cors())
 // Création de la route API
 app.post('/api/auth/signup', checkAuthParams, signUp)
 app.post('/api/auth/login', checkAuthParams, logIn)
-app.get('/api/post', auth, test)
+app.get('/api/user/profile', auth, getProfile)
+app.post('/api/user/profile', auth, setProfile)
+app.get('/api/post', auth, getPostsList)
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

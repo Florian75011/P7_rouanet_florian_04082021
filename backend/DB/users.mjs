@@ -2,6 +2,14 @@ import { sqlEscape } from './DB.mjs'
 import { sqlQuery } from './DB.mjs'
 
 const tableName = 'users'
+const defaultFields = [
+  'user_id AS id',
+  'user_first_name AS firstName',
+  'user_last_name AS lastName',
+  'user_email AS email',
+  'user_creation_date AS creationDate',
+  'user_role AS role',
+]
 
 // Une fonction qui crée une table stocké dans une variable
 export async function initUsersTable() {
@@ -23,10 +31,23 @@ export async function initUsersTable() {
 }
 
 // Récupérer l'utilisateur par son email
-export async function getUserByEmail(email) {
+export async function getUserByEmail(email, fields = defaultFields) {
   try {
     const rows = await sqlQuery(
-      `SELECT * FROM ${tableName} WHERE user_email = '${email}'`
+      `SELECT ${fields} FROM ${tableName} WHERE user_email = '${email}'`
+    )
+    // Si le tableau a quelque chose renvoie-le, sinon c'est non définit
+    return rows.length > 0 ? rows[0] : null
+  } catch (err) {
+    throw err
+  }
+}
+
+// Récupérer l'utilisateur par son id
+export async function getUserById(id, fields = defaultFields) {
+  try {
+    const rows = await sqlQuery(
+      `SELECT ${fields} FROM ${tableName} WHERE user_id = ${id}`
     )
     // Si le tableau a quelque chose renvoie-le, sinon c'est non définit
     return rows.length > 0 ? rows[0] : null
@@ -50,4 +71,18 @@ export async function createUser(firstName, lastName, email, password) {
   }
 }
 
-createUser("Leo'", 'Dupont', 'ld@gmail.com', 'abc123')
+// Modifie prénom et nom de notre utilisateur connecté
+export async function updateUser(id, firstName, lastName) {
+  try {
+    const result = await sqlQuery(
+      `UPDATE ${tableName}
+        SET user_first_name = ${sqlEscape(
+          firstName
+        )}, user_last_name = ${sqlEscape(lastName)}
+        WHERE user_id = ${id}`
+    )
+    return result.insertId
+  } catch (err) {
+    throw err
+  }
+}

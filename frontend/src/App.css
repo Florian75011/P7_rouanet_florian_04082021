@@ -10,10 +10,10 @@
   margin: 0 auto;
 }
 * h2 {
-  color: rgba(218, 223, 225, 0.8);
+  color: rgba(218, 223, 225, 0.9);
 }
 * p {
-  color: rgba(0, 0, 255, 0.6);
+  color: rgba(0, 0, 255, 0.7);
 }
 * form {
   display: flex;
@@ -26,6 +26,13 @@
   font-size: inherit;
   width: 100%;
 }
+* textarea {
+  resize: none;
+  padding: 10px;
+  font-size: inherit;
+  width: 100%;
+  height: 8rem;
+}
 * button {
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -37,8 +44,8 @@
   margin: 0;
   margin-top: 5px;
   padding: 10px;
-  color: rgba(255, 0, 0, 0.6);
+  color: rgba(255, 0, 0, 0.7);
 }
-* input + input, * .form-error + input, * button {
+* input + input, * .form-error + input, * button, * input + textarea, * textarea + input {
   margin-top: 10px;
 }/*# sourceMappingURL=App.css.map */

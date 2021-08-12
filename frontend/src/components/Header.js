@@ -43,7 +43,8 @@ export default function Header(props) {
     setToken(localStorage.accessToken)
   })
 
-  function logOut() {
+  function logOut(e) {
+    e.preventDefault()
     localStorage.removeItem('accessToken')
     history.push('/login')
   }
@@ -57,21 +58,26 @@ export default function Header(props) {
       <nav>
         <p>Notre forum intranet</p>
         {!token && (
-          <button>
-            <Link to="/">Connexion</Link>
-          </button>
-        )}
-        {!token && (
-          <button>
-            <Link to="/signup">Inscription</Link>
-          </button>
+          <>
+            <button>
+              <Link to="/">Connexion</Link>
+            </button>
+            <button>
+              <Link to="/signup">Inscription</Link>
+            </button>
+          </>
         )}
         {token && (
-          <button>
-            <Link to="/" onClick={() => logOut()}>
-              Déconnexion
-            </Link>
-          </button>
+          <>
+            <button>
+              <Link to="/profile">Profil</Link>
+            </button>
+            <button>
+              <Link to="/" onClick={logOut}>
+                Déconnexion
+              </Link>
+            </button>
+          </>
         )}
       </nav>
     </HeaderSC>

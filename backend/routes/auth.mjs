@@ -83,18 +83,19 @@ export async function logIn(req, res, next) {
   try {
     const { email, password } = req.body
     // Vérifier que cet email existe
-    const searchUser = await getUserByEmail(email)
+    const searchUser = await getUserByEmail(email, [
+      'user_id AS id',
+      'user_password AS password',
+      'user_role AS role',
+    ])
     if (searchUser) {
-      // NOTE: revoir en cas de masquage
-      const match = bcrypt.compareSync(password, searchUser.user_password)
+      const match = bcrypt.compareSync(password, searchUser.password)
       if (match === true) {
         // Créer le token, et envoyer une réponse - Créer un objet prenant en compte un userId avec le résultat du searchUser + le token secret
         const obj = {
-          // NOTE: revoir en cas de masquage
-          userId: searchUser.user_id, // Contenu d'un jeton: user de la doc API + ID de MongoDB
+          userId: searchUser.id, // Contenu d'un jeton: user de la doc API + ID de MongoDB
           token: jwt.sign(
-            // NOTE: revoir en cas de masquage
-            { userId: searchUser.user_id, userRole: searchUser.user_role },
+            { userId: searchUser.id, userRole: searchUser.role },
             process.env.TOKEN_SECRET,
             { expiresIn: '12h' }
           ), // L'utilisateur existe vraiment, donc on lui renvoie un jeton/token ; Crypte information pour la décrypter ensuite
