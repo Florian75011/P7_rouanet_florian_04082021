@@ -56,27 +56,20 @@ export default function Header(props) {
         <img src={imgHeader} alt="" />
       </div>
       <nav>
-        <p>Notre forum intranet</p>
+        <p>Notre base de connexion</p>
         {!token && (
           <>
-            <button>
               <Link to="/">Connexion</Link>
-            </button>
-            <button>
               <Link to="/signup">Inscription</Link>
-            </button>
           </>
         )}
         {token && (
           <>
-            <button>
+              <Link to="/">Forum</Link>
               <Link to="/profile">Profil</Link>
-            </button>
-            <button>
               <Link to="/" onClick={logOut}>
                 Déconnexion
               </Link>
-            </button>
           </>
         )}
       </nav>

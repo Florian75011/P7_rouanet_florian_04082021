@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import { errorHandler } from './errorHandler.mjs'
 
 dotenv.config()
 
@@ -24,31 +25,26 @@ export function auth(req, res, next) {
       // Nouveau if si on est bien "isConnected"
       next()
     } else {
-      res.status(401).json(new Error('Pas connecté'))
+      errorHandler(req, res, 401)
     }
   } catch (err) {
     console.log(err)
-    res.status(401).json({
-      error: new Error('Requête Invalide!'),
-    })
+    res.status(401).json({ error: new Error('Requête Invalide!') })
   }
 }
 
-// Permet la modification/suppression d'élément (sauce) par quelqu'un branché sur son propre compte
-//   export function isOwner(req, res, checkUserId) {
-//     // Fonction de vérification de l'utilisateur
-//     try {
-//       if (
-//         req.headers.authorization &&
-//         req.headers.authorization.startsWith("Bearer ")
-//       ) {
-//         const token = req.headers.authorization.split(" ")[1];
-//         const decodedToken = jwt.decode(token, process.env.TOKEN_SECRET); // Jwt récupère le contenu du token avec .decode
-//         return decodedToken.userId === checkUserId; // L'ID dans le Token a-t-il le même ID que celui dans la sauce ajoutée, renvoie true ou false
-//       } else {
-//         throw new Error("Token manquant");
-//       }
-//     } catch (err) {
-//       throw err; // Minimiser les sorties d'erreur pour ne pas encombrer la boîte (petite transmission de l'erreur au parent deleteOne)
-//     }
-//   }
+// Propriétaire - Permet la modification/suppression d'élément (post) par quelqu'un de branché sur son propre compte
+export function isOwner(req, res, checkUserId) {
+  // Fonction de vérification de l'utilisateur
+  try {
+    if (checkUserId === undefined) {
+      throw new Error('checkUserId undefined')
+    }
+    const decoded = jwt.decode(req.accessToken, process.env.TOKEN_SECRET) // Jwt récupère le contenu du token avec .decode
+    console.log(decoded.userId, typeof decoded.userId)
+    console.log(checkUserId, typeof checkUserId)
+    return decoded.userId === checkUserId // L'ID dans le Token a-t-il le même ID que celui de l'élément ajouté, renvoie true ou false
+  } catch (err) {
+    throw err // Minimiser les sorties d'erreur pour ne pas encombrer la boîte (petite transmission de l'erreur au parent deleteOne)
+  }
+}

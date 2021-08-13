@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { updateUser, getUserById } from '../DB/users.mjs'
+import { errorHandler } from '../middlewares/errorHandler.mjs'
 
 // Gestion back du profile utilisateur (récupération et modification)
 export async function getProfile(req, res, next) {
@@ -15,7 +16,7 @@ export async function getProfile(req, res, next) {
       throw new Error('Utilisateur connecté introuvable') // Création d'erreur éventuelle
     }
   } catch (err) {
-    res.status(500).json({ message: "Une erreur s'est produite" })
+    errorHandler(req, res, err)
   }
 }
 
@@ -32,10 +33,10 @@ export async function setProfile(req, res, next) {
         throw new Error('Utilisateur connecté introuvable') // Création d'erreur éventuelle
       }
     } else {
-      res.status(400).json({ message: 'Paramètres manquants ou invalides!' })
+      errorHandler(req, res, 400)
     }
   } catch (err) {
-    res.status(500).json({ message: "Une erreur s'est produite" })
+    errorHandler(req, res, err)
   }
 }
 

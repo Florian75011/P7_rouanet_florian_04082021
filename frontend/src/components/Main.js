@@ -1,11 +1,12 @@
 import React from 'react'
 import Login from '../pages/Login'
 import Signup from '../pages/Signup'
-import Error404 from '../pages/Error'
+import Error404 from '../pages/Error404'
 import { Switch, Route } from 'react-router-dom'
 import Posts from '../pages/Posts'
 import Profile from './Profile'
 import PostCreate from '../pages/PostCreate'
+import PostEdit from '../pages/PostEdit'
 
 // CSS dans SASS
 
@@ -19,6 +20,7 @@ export default function Main() {
         <Route path="/signup" component={Signup} />
         <Route path="/profile" component={Profile} />
         <Route path="/create_post" component={PostCreate} />
+        <Route path="/edit_post" component={PostEdit} />
         <Route component={Error404} />
       </Switch>
     </main>

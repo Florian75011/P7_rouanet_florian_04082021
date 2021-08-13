@@ -1,5 +1,4 @@
-import { sqlEscape } from './DB.mjs'
-import { sqlQuery } from './DB.mjs'
+import { sqlEscape, sqlQuery } from './DB.mjs'
 
 const tableName = 'users'
 const defaultFields = [

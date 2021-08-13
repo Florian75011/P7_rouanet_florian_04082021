@@ -1,16 +1,40 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
-import { fetchPost } from '../utils/fetch'
+import { fetchGet, fetchPost } from '../utils/fetch'
+import queryString from 'query-string'
 
-export default function PostCreate() {
+// Une copie de PostCreate.js sauf pour la gestion de l'ID de Post
+export default function PostEdit() {
   const [fieldTitle, setFieldTitle] = useState('')
   const [fieldText, setFieldText] = useState('')
   const [errorTitle, setErrorTitle] = useState('')
   const [errorText, setErrorText] = useState('')
 
   const history = useHistory()
-  const [displayPage, setDisplayPage] = useState(true)
+  const [displayPage, setDisplayPage] = useState(false)
+  const [pageError, setPageError] = useState(null)
+
+  // Gestion propre de la page
+  useEffect(() => {
+    async function loadPost(id) {
+      const result = await fetchGet('/api/post/' + id)
+      if (result.status === 200) {
+        setFieldTitle(result.data.title)
+        setFieldText(result.data.text)
+        setDisplayPage(true) // réactivation de la page
+      } else {
+        // Signalement d'erreur
+        setPageError({ code: result.status, message: result.message })
+      }
+    }
+    const postId = Number(queryString.parse(history.location.search).id) // Garde les nombres pour l'id des pages
+    if (!isNaN(postId)) {
+      loadPost(postId)
+    } else {
+      setPageError({ code: 404, message: 'Page introuvable' }) // ID inexistant, donc erreur 404
+    }
+  }, [])
 
   function handleChangeTitle(e) {
     e.preventDefault()
@@ -44,16 +68,15 @@ export default function PostCreate() {
 
     if (canSubmit()) {
       const body = {
-        userId: localStorage.userId,
         title: fieldTitle,
         text: fieldText,
       }
       // Envoie au serveur, cible la création de compte:
-      console.log(localStorage.userId)
-      await fetchPost('/api/post', body)
+      const postId = Number(queryString.parse(history.location.search).id) // Garde les nombres pour l'id des pages
+      await fetchPost('/api/post/' + postId, body)
         //   // Redirection de l'utilisateur inscrit:
         .then((res) => {
-          history.push("/")
+          history.push('/')
         })
         .catch((error) => {
           throw error
@@ -62,7 +85,7 @@ export default function PostCreate() {
   }
 
   return (
-    <Loader loadOn={displayPage === true}>
+    <Loader loadOn={displayPage === true} error={pageError}>
       <form>
         <input
           type="text"

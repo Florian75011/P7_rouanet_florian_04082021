@@ -1,5 +1,4 @@
-import { sqlEscape } from './DB.mjs'
-import { sqlQuery } from './DB.mjs'
+import { sqlEscape, sqlQuery } from './DB.mjs'
 
 const tableName = 'posts'
 // Alias pour faire du masquage des données
@@ -46,8 +45,21 @@ export async function getAllPosts(fields = defaultFields) {
   }
 }
 
+// Récupérer un post par un ID
+export async function getPostById(id, fields = defaultFields) {
+  try {
+    const rows = await sqlQuery(
+      `SELECT ${fields} FROM ${tableName} WHERE post_id = ${id}`
+    )
+    // Si le tableau a quelque chose renvoie-le, sinon c'est non définit
+    return rows.length > 0 ? rows[0] : null
+  } catch (err) {
+    throw err
+  }
+}
+
 // Créer la fonction de POST d'une nouvelle publication qui sera appelée dans le fichier route/post.mjs pour faire chaque post (MYSQL)
-export async function postsCreate(userId, title, text) {
+export async function createPost(userId, title, text) {
   try {
     const result = await sqlQuery(
       `INSERT INTO ${tableName} (post_user_id, post_title, post_text)
@@ -59,17 +71,16 @@ export async function postsCreate(userId, title, text) {
   }
 }
 
-/*
-result.insertId
-export async function postsCreate(newPost) {
+// Fonction pour éditer les post à partir de la BDD
+export async function editPost(id, title, text) {
   try {
-    const rows= await sqlQuery(
-      `INSERT INTO ${tableName} (post_user_id, post_title, post_text)
-      VALUES (${sqlEscape(newPost.userId)}, ${sqlEscape(newPost.title)}, ${sqlEscape(newPost.text)}`
+    const result = await sqlQuery(
+      `UPDATE ${tableName}
+        SET post_title = ${sqlEscape(title)}, post_text = ${sqlEscape(text)}
+        WHERE post_id = ${id}`
     )
     return result.insertId
   } catch (err) {
     throw err
   }
 }
-*/

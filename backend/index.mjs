@@ -5,9 +5,8 @@ import { sqlQuery } from './DB/DB.mjs'
 import { initTables } from './DB/init.mjs'
 import { signUp, logIn, checkAuthParams } from './routes/auth.mjs'
 import { auth } from './middlewares/auth.mjs'
-import { getPostsList } from './routes/post.mjs'
+import { getPostsList, postCreate, postEdit, getPostForEdit } from './routes/post.mjs'
 import { getProfile, setProfile } from './routes/user.mjs'
-import { postCreate } from './routes/post.mjs'
 
 // import dotenv from "dotenv";
 
@@ -41,7 +40,9 @@ app.post('/api/auth/login', checkAuthParams, logIn)
 app.get('/api/user/profile', auth, getProfile)
 app.post('/api/user/profile', auth, setProfile)
 app.get('/api/post', auth, getPostsList)
+app.get('/api/post/:id', auth, getPostForEdit)
 app.post('/api/post', auth, postCreate)
+app.post('/api/post/:id', auth, postEdit)
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

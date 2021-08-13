@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { getUserByEmail } from '../DB/users.mjs'
 import { createUser } from '../DB/users.mjs'
+import { errorHandler } from '../middlewares/errorHandler.mjs'
 
 dotenv.config() // Permet d'user des .env
 
@@ -19,20 +20,22 @@ export function checkAuthParams(req, res, next) {
   ) {
     // Vérifier l'email
     if (!isValidEmail(req.body.email)) {
-      res.status(400).json({ message: 'Email non valide!' })
+      errorHandler(req, res, 400, 'Email non valide')
     }
     // Vérifier mot de passe
     else if (!isValidPassword(req.body.password)) {
-      res.status(400).json({
-        message:
-          'Mot de passe non valide (6 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial)',
-        // Contraint à faire un MDP sécurisé
-      })
+      errorHandler(
+        req,
+        res,
+        400,
+        'Mot de passe non valide (6 caractères minimum, une majuscule, une minuscule, un chiffre et un caractère spécial)'
+      )
+      // Contraint à faire un MDP sécurisé
     } else {
       next()
     }
   } else {
-    res.status(400).json({ message: 'Paramètres manquants ou invalides!' })
+    errorHandler(req, res, 400)
   }
 }
 
@@ -68,13 +71,13 @@ export async function signUp(req, res, next) {
           message: "Inscription de l'utilisateur réussie",
         }) // 201 dit que le compte est créé avec succès
       } else {
-        res.status(400).json({ message: 'Email déjà utilisé !' })
+        errorHandler(req, res, 400, 'Email déjà utilisé')
       }
     } else {
-      res.status(400).json({ message: 'Paramètres manquants ou invalides!' })
+      errorHandler(req, res, 400)
     }
   } catch (err) {
-    res.status(500).json({ message: "Une erreur s'est produite" }) // Ne pas identifier précisémment l'erreur pour ne pas aider les pirates informatiques
+    errorHandler(req, res, err)
   }
 }
 
@@ -102,13 +105,12 @@ export async function logIn(req, res, next) {
         }
         res.status(200).json(obj)
       } else {
-        res.status(400).json({ message: 'Identifiants invalides' })
+        errorHandler(req, res, 400, 'Identifiants invalides')
       }
     } else {
-      res.status(400).json({ message: 'Identifiants invalides' })
+      errorHandler(req, res, 400, 'Identifiants invalides')
     }
   } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: "Une erreur s'est produite" }) // Ne pas l'identifier précisémment pour ne pas aider les pirates informatiques
+    errorHandler(req, res, err)
   }
 }

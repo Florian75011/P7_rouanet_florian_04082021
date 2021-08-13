@@ -30,9 +30,13 @@ export default function Posts() {
   }, []) // lancer ceci seulement au chargement de la page après vérif (protection frontend)
 
   function handleCreatePost() {
-    history.push("/create_post")
+    history.push('/create_post')
   }
-  
+
+  function handleEditPost(e) {
+    history.push('/edit_post?id=' + e.target.value)
+  }
+
   return (
     <Loader loadOn={displayPage === true}>
       <div>Bienvenue sur le forum de notre boîte</div>
@@ -47,6 +51,9 @@ export default function Posts() {
               </h2>
               <time>{post.creationDate}</time>
               <p>{post.text}</p>
+              <button onClick={handleEditPost} value={post.id}>
+                Modifier
+              </button>
             </div>
           )
         })}

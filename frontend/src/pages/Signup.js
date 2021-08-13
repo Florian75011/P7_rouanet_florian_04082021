@@ -140,7 +140,7 @@ export default function Signup() {
           onChange={handleChangePassword}
         />
         {errorPassword && <p className="form-error">{errorPassword}</p>}
-        <button onClick={handleSubmit}>Se connecter</button>
+        <button onClick={handleSubmit}>S'inscrire</button>
       </form>
     </>
   )
