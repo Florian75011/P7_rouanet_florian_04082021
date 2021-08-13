@@ -6,7 +6,7 @@ async function fetchBase(method, routeUrl, body = null) {
   headers.append('Content-Type', 'application/json')
   const token = JSON.parse(localStorage.getItem('accessToken'))
   if (token) {
-    console.log('Bearer ' + token, typeof token)
+    // console.log('Bearer ' + token, typeof token)
     headers.append('Authorization', 'Bearer ' + token)
   }
   const options = { method, headers }
@@ -30,6 +30,10 @@ export async function fetchGet(routeUrl) {
 
 export async function fetchPost(routeUrl, body) {
   return await fetchBase('POST', routeUrl, body)
+}
+
+export async function fetchDelete(routeUrl) {
+  return await fetchBase('DELETE', routeUrl)
 }
 
 // Envoyer token

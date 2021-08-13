@@ -84,3 +84,16 @@ export async function editPost(id, title, text) {
     throw err
   }
 }
+
+// Fonction pour supprimer les post à partir de la BDD
+export async function deletePost(id) {
+  try {
+    const result = await sqlQuery(
+      `DELETE FROM ${tableName}
+        WHERE post_id = ${id}`
+    )
+    return 'Objet supprimé'
+  } catch (err) {
+    throw err
+  }
+}

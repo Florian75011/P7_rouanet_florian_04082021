@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
-import { fetchGet, fetchPost } from '../utils/fetch'
+import { fetchDelete, fetchGet, fetchPost } from '../utils/fetch'
 import queryString from 'query-string'
 
 // Une copie de PostCreate.js sauf pour la gestion de l'ID de Post
 export default function PostEdit() {
   const [fieldTitle, setFieldTitle] = useState('')
   const [fieldText, setFieldText] = useState('')
+  const [postUserId, setPostUserId] = useState('')
+  const [postId, setPostId] = useState('')
   const [errorTitle, setErrorTitle] = useState('')
   const [errorText, setErrorText] = useState('')
 
@@ -20,8 +22,10 @@ export default function PostEdit() {
     async function loadPost(id) {
       const result = await fetchGet('/api/post/' + id)
       if (result.status === 200) {
+        setPostUserId(result.data.userId)
         setFieldTitle(result.data.title)
         setFieldText(result.data.text)
+        setPostId(result.data.id)
         setDisplayPage(true) // réactivation de la page
       } else {
         // Signalement d'erreur
@@ -65,7 +69,6 @@ export default function PostEdit() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-
     if (canSubmit()) {
       const body = {
         title: fieldTitle,
@@ -84,6 +87,21 @@ export default function PostEdit() {
     }
   }
 
+  async function handleDelete(e) {
+    e.preventDefault()
+    // Envoie au serveur, cible la création de compte:
+    await fetchDelete('/api/post/' + postId)
+      //   // Redirection de l'utilisateur inscrit:
+      .then(() => {
+        console.log('ok');
+        history.push('/')
+      })
+      .catch((error) => {
+        throw error
+      })
+      
+  }
+
   return (
     <Loader loadOn={displayPage === true} error={pageError}>
       <form>
@@ -100,7 +118,10 @@ export default function PostEdit() {
           onChange={handleChangeText}
         />
         {errorText && <p className="form-error">{errorText}</p>}
-        <button onClick={handleSubmit}>Envoyer votre publication</button>
+        <button onClick={handleSubmit}>Modifier votre publication</button>
+        {localStorage.userId == postUserId && (
+          <button onClick={handleDelete}>Supprimer votre publication</button>
+        )}
       </form>
     </Loader>
   )

@@ -5,7 +5,13 @@ import { sqlQuery } from './DB/DB.mjs'
 import { initTables } from './DB/init.mjs'
 import { signUp, logIn, checkAuthParams } from './routes/auth.mjs'
 import { auth } from './middlewares/auth.mjs'
-import { getPostsList, postCreate, postEdit, getPostForEdit } from './routes/post.mjs'
+import {
+  getPostsList,
+  postCreate,
+  postEdit,
+  getPostForEdit,
+  postDelete,
+} from './routes/post.mjs'
 import { getProfile, setProfile } from './routes/user.mjs'
 
 // import dotenv from "dotenv";
@@ -35,14 +41,15 @@ app.use(cors())
 // app.use("/images", express.static(path.join(__dirname, "images"))); // Indique que le dossier possède des fichiers statiques
 
 // Création de la route API
-app.post('/api/auth/signup', checkAuthParams, signUp)
+app.post('/api/auth/signup', checkAuthParams, signUp) // Connexion
 app.post('/api/auth/login', checkAuthParams, logIn)
-app.get('/api/user/profile', auth, getProfile)
+app.get('/api/user/profile', auth, getProfile) // Profil
 app.post('/api/user/profile', auth, setProfile)
-app.get('/api/post', auth, getPostsList)
+app.get('/api/post', auth, getPostsList) // Récupération
 app.get('/api/post/:id', auth, getPostForEdit)
-app.post('/api/post', auth, postCreate)
+app.post('/api/post', auth, postCreate) // Modification
 app.post('/api/post/:id', auth, postEdit)
+app.delete('/api/post/:id', auth, postDelete) // Suppression
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

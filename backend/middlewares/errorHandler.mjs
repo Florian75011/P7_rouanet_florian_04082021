@@ -12,7 +12,7 @@ export function errorHandler(req, res, errCode, errMessage = '') {
       401: 'Non connecté',
       403: 'Non autorisé',
       404: 'Ressource introuvable',
-      500: 'Erreur interne du serveur',
+      500: 'Erreur interne au serveur',
     }[errCode]
   }
   res.status(errCode).json({ message })

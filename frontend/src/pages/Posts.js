@@ -49,11 +49,11 @@ export default function Posts() {
               <h2>
                 {post.userFirstName} {post.userLastName}
               </h2>
-              <time>{post.creationDate}</time>
+              <time>{new Date(post.creationDate).toLocaleString('fr-FR', { timeZone: 'UTC' })}</time>
               <p>{post.text}</p>
-              <button onClick={handleEditPost} value={post.id}>
+              {localStorage.userId == post.userId &&<button onClick={handleEditPost} value={post.id}>
                 Modifier
-              </button>
+              </button>}
             </div>
           )
         })}

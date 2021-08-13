@@ -41,8 +41,8 @@ export function isOwner(req, res, checkUserId) {
       throw new Error('checkUserId undefined')
     }
     const decoded = jwt.decode(req.accessToken, process.env.TOKEN_SECRET) // Jwt récupère le contenu du token avec .decode
-    console.log(decoded.userId, typeof decoded.userId)
-    console.log(checkUserId, typeof checkUserId)
+    // console.log(decoded.userId, typeof decoded.userId)
+    // console.log(checkUserId, typeof checkUserId)
     return decoded.userId === checkUserId // L'ID dans le Token a-t-il le même ID que celui de l'élément ajouté, renvoie true ou false
   } catch (err) {
     throw err // Minimiser les sorties d'erreur pour ne pas encombrer la boîte (petite transmission de l'erreur au parent deleteOne)

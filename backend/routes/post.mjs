@@ -1,4 +1,10 @@
-import { createPost, editPost, getPostById, getAllPosts } from '../DB/posts.mjs'
+import {
+  createPost,
+  deletePost,
+  editPost,
+  getPostById,
+  getAllPosts,
+} from '../DB/posts.mjs'
 import { isOwner } from '../middlewares/auth.mjs'
 import { errorHandler } from '../middlewares/errorHandler.mjs'
 
@@ -52,7 +58,7 @@ export async function postCreate(req, res, next) {
 export async function postEdit(req, res, next) {
   try {
     if (req.params.id && !isNaN(Number(req.params.id))) {
-      const searchPost = await getPostById(req.params.id) // On récupère les paramètres d'URL
+      const searchPost = await getPostById(req.params.id) // On récupère les paramètres d'URL si c'est bien un nombre
       if (searchPost) {
         // Permission donnée si le post est bien modifier par son créateur
         if (isOwner(req, res, searchPost.userId)) {
@@ -72,3 +78,33 @@ export async function postEdit(req, res, next) {
     errorHandler(req, res, err)
   }
 }
+
+// Appeler la fonction pour supprimer les posts
+export async function postDelete(req, res, next) {
+  try {
+    if (req.params.id && !isNaN(Number(req.params.id))) {
+      const searchPost = await getPostById(req.params.id) // On récupère les paramètres d'URL
+      if (searchPost) {
+        // Permission donnée si le post est bien modifier par son créateur
+        if (isOwner(req, res, searchPost.userId)) {
+          await deletePost(searchPost.id)
+            .then(() => res.status(204).json({ message: 'Message supprimé' }))
+            .catch((error) => errorHandler(req, res, error.status))
+        }
+      }
+    }
+  } catch (err) {
+    errorHandler(req, res, err)
+  }
+}
+
+//         res.status(204).json({ message: 'Message supprimé' })
+//       } else {
+//         errorHandler(req, res, 403)
+//       }
+//     } else {
+//       errorHandler(req, res, 404)
+//     }
+//   } else {
+//     errorHandler(req, res, 400)
+//   }
