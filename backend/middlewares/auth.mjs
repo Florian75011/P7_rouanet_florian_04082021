@@ -33,7 +33,7 @@ export function auth(req, res, next) {
   }
 }
 
-// Propriétaire - Permet la modification/suppression d'élément (post) par quelqu'un de branché sur son propre compte
+// Propriétaire - Permet la modification/suppression d'élément (post/profil) par quelqu'un de branché sur son propre compte
 export function isOwner(req, res, checkUserId) {
   // Fonction de vérification de l'utilisateur
   try {

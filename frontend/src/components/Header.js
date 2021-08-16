@@ -53,7 +53,7 @@ export default function Header(props) {
   return (
     <HeaderSC textColor={colors.primary}>
       <div>
-        <img src={imgHeader} alt="" />
+        <img src={imgHeader} alt="Groupomania" />
       </div>
       <nav>
         <p>Notre base de connexion</p>

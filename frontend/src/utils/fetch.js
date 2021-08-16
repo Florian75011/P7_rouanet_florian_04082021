@@ -33,6 +33,7 @@ export async function fetchPost(routeUrl, body) {
 }
 
 export async function fetchDelete(routeUrl) {
+
   return await fetchBase('DELETE', routeUrl)
 }
 

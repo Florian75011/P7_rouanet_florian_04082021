@@ -97,3 +97,5 @@ export async function deletePost(id) {
     throw err
   }
 }
+
+// Additionnel : gestion des commentaires
