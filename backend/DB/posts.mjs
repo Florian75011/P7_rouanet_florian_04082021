@@ -59,11 +59,11 @@ export async function getPostById(id, fields = defaultFields) {
 }
 
 // Créer la fonction de POST d'une nouvelle publication qui sera appelée dans le fichier route/post.mjs pour faire chaque post (MYSQL)
-export async function createPost(userId, title, text) {
+export async function createPost(userId, title, text, images) {
   try {
     const result = await sqlQuery(
-      `INSERT INTO ${tableName} (post_user_id, post_title, post_text)
-      VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(text)})`
+      `INSERT INTO ${tableName} (post_user_id, post_title, post_text, post_image_path)
+      VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(text)}, ${sqlEscape(images)})`
     )
     return result.insertId
   } catch (err) {

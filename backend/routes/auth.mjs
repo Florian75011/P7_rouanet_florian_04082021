@@ -66,10 +66,20 @@ export async function signUp(req, res, next) {
       if (searchUser === null) {
         const hash = await bcrypt.hash(password, 10) // Hashé le MDP côté backend pour ne rien stocker dans la dataBase
         const result = await createUser(firstName, lastName, email, hash)
-        res.status(201).json({
-          data: result,
-          message: "Inscription de l'utilisateur réussie",
-        }) // 201 dit que le compte est créé avec succès
+        // res.status(201).json({
+        //   data: result,
+        //   message: "Inscription de l'utilisateur réussie",
+        // }) // 201 dit que le compte est créé avec succès
+        console.log(result);
+        const obj = {
+          userId: result, // Basculer sur logIn après inscription
+          token: jwt.sign(
+            { userId: result, userRole: 'result.role' },
+            process.env.TOKEN_SECRET,
+            { expiresIn: '12h' }
+          ), // L'utilisateur existe vraiment, donc on lui renvoie un jeton/token ; Crypte information pour la décrypter ensuite
+        }
+        res.status(200).json(obj)
       } else {
         errorHandler(req, res, 400, 'Email déjà utilisé')
       }

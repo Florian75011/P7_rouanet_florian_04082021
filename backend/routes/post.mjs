@@ -7,6 +7,7 @@ import {
 } from '../DB/posts.mjs'
 import { isOwner } from '../middlewares/auth.mjs'
 import { errorHandler } from '../middlewares/errorHandler.mjs'
+import { upload } from '../middlewares/upload.mjs'
 
 export async function getPostsList(req, res, next) {
   try {
@@ -46,8 +47,12 @@ export async function getPostForEdit(req, res, next) {
 // Appeler la fonction POST
 export async function postCreate(req, res, next) {
   try {
+    let image = null;
+    if (req.file ==!undefined) {
+      image = req.file.path;
+    }
     const { userId, title, text } = req.body
-    const result = await createPost(userId, title, text)
+    const result = await createPost(userId, title, text, image)
     res.status(201).json({ data: result, message: "C'est fonctionnel" })
   } catch (err) {
     errorHandler(req, res, err)
@@ -88,7 +93,7 @@ export async function postDelete(req, res, next) {
         // Permission donnée si le post est bien modifier par son créateur
         if (isOwner(req, res, searchPost.userId)) {
           await deletePost(searchPost.id)
-            .then(() => res.status(204).json({ message: 'Message supprimé' }))
+            .then(() => res.status(200).json({ message: 'Message supprimé' }))
             .catch((error) => errorHandler(req, res, error.status))
         }
       }
@@ -97,14 +102,3 @@ export async function postDelete(req, res, next) {
     errorHandler(req, res, err)
   }
 }
-
-//         res.status(204).json({ message: 'Message supprimé' })
-//       } else {
-//         errorHandler(req, res, 403)
-//       }
-//     } else {
-//       errorHandler(req, res, 404)
-//     }
-//   } else {
-//     errorHandler(req, res, 400)
-//   }

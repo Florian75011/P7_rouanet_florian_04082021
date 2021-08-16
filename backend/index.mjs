@@ -13,6 +13,8 @@ import {
   postDelete,
 } from './routes/post.mjs'
 import { getProfile, setProfile } from './routes/user.mjs'
+import { userDelete } from './DB/users.mjs'
+import { upload } from './middlewares/upload.mjs'
 
 // import dotenv from "dotenv";
 
@@ -20,6 +22,7 @@ import { getProfile, setProfile } from './routes/user.mjs'
 
 const app = express()
 app.use(express.json()) // Permet de recevoir des corps de requête en JSON
+app.use('/images/assets', express.static('assets')); // Si on copie 
 app.use(helmet()) // Module de sécurité évitant certaines formes d'attaques informatiques courantes
 app.use(cors())
 // app.use((req, res, next) => {
@@ -47,9 +50,10 @@ app.get('/api/user/profile', auth, getProfile) // Profil
 app.post('/api/user/profile', auth, setProfile)
 app.get('/api/post', auth, getPostsList) // Récupération
 app.get('/api/post/:id', auth, getPostForEdit)
-app.post('/api/post', auth, postCreate) // Modification
+app.post('/api/post', auth, upload, postCreate) // Création & modification + image
 app.post('/api/post/:id', auth, postEdit)
 app.delete('/api/post/:id', auth, postDelete) // Suppression
+app.delete('/api/post/user', auth, userDelete)
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

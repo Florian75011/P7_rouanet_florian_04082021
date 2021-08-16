@@ -47,13 +47,14 @@ export default function PostCreate() {
         userId: localStorage.userId,
         title: fieldTitle,
         text: fieldText,
+        // image: fieldImage,
       }
       // Envoie au serveur, cible la création de compte:
       console.log(localStorage.userId)
       await fetchPost('/api/post', body)
         //   // Redirection de l'utilisateur inscrit:
         .then((res) => {
-          history.push("/")
+          history.push('/')
         })
         .catch((error) => {
           throw error
@@ -61,9 +62,25 @@ export default function PostCreate() {
     }
   }
 
+  /*
+  var formdata = new FormData();
+  formdata.append("title", "coucou");
+  formdata.append("text", "content");
+  formdata.append("image", fileInput.files[0], "Portrait.png");
+  formdata.append("userId", "442");
+
+  var requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  body: formdata,
+  redirect: 'follow'
+  };
+  */
+
   return (
     <Loader loadOn={displayPage === true}>
       <form>
+        <input type="file" />
         <input
           type="text"
           placeholder="Entrez le titre"

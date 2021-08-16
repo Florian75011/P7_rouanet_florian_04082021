@@ -40,4 +40,18 @@ export async function setProfile(req, res, next) {
   }
 }
 
-// ROUTE DE SUPPRESSION DE PROFIL
+// Route de suppression de profil
+export async function deleteProfile(req, res, next) {
+  try {
+      const decoded = jwt.decode(req.accessToken)
+      const searchUser = await getUserById(decoded.userId) // await car communique avec la base de donnée
+      if (searchUser) {
+        await deleteUser(decoded.userId, firstName, lastName)
+        res.status(200).json({ message: 'Compte mis à jour !' })
+      } else {
+        throw new Error('Utilisateur connecté introuvable') // Création d'erreur éventuelle
+      }
+  } catch (err) {
+    errorHandler(req, res, err)
+  }
+}
