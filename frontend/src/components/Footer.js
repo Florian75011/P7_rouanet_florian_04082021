@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import colors from '../colors'
 
+// Footer est présent sur toutes les pages
+
 const FooterSC = styled.footer`
   display: flex;
   flex-direction: column;

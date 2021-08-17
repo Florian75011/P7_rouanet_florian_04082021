@@ -30,7 +30,6 @@ export default function Profile() {
       }
     }
     loadProfile()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // lancer ceci seulement au chargement de la page après vérif (protection frontend)
 
   function handleChangeFirstName(e) {
@@ -70,11 +69,9 @@ export default function Profile() {
       }
       // Envoie au serveur, cible la création de compte:
       const result = await fetchPost('/api/user/profile', body)
-      console.log(result)
       // Redirection de l'utilisateur inscrit:
       switch (result.status) {
         case 200:
-          console.log('Redirection')
           history.push('/')
           break
         case 400:

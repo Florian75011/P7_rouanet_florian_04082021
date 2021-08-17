@@ -50,7 +50,6 @@ export default function PostCreate() {
         // image: fieldImage,
       }
       // Envoie au serveur, cible la création de compte:
-      console.log(localStorage.userId)
       await fetchPost('/api/post', body)
         //   // Redirection de l'utilisateur inscrit:
         .then((res) => {

@@ -1,5 +1,6 @@
 import { sqlEscape, sqlQuery } from './DB.mjs'
 
+// Gestion des publications en MYSQL
 const tableName = 'posts'
 // Alias pour faire du masquage des données
 const defaultFields = [
@@ -39,7 +40,7 @@ export async function getAllPosts(fields = defaultFields) {
     JOIN users
     ON post_user_id = user_id
     `)
-    return rows
+    return rows // Rows essaie d'obtenir des données
   } catch (err) {
     throw err
   }
@@ -65,7 +66,7 @@ export async function createPost(userId, title, text, images) {
       `INSERT INTO ${tableName} (post_user_id, post_title, post_text, post_image_path)
       VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(text)}, ${sqlEscape(images)})`
     )
-    return result.insertId
+    return result.insertId // Result est le résultat d'une action
   } catch (err) {
     throw err
   }

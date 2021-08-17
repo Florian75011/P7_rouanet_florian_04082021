@@ -39,7 +39,6 @@ export default function Posts() {
           if (dateB < dateA) return -1
           return 0
         })
-        console.log(result.data)
         setPosts(result.data)
         setDisplayPage(true)
       } else {

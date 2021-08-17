@@ -1,5 +1,6 @@
 import { sqlEscape, sqlQuery } from './DB.mjs'
 
+// La route des users va gérer les profiles
 const tableName = 'users'
 const defaultFields = [
   'user_id AS id',

@@ -1,4 +1,5 @@
 // 2 fonctions permettant de renforcer la création de compte utilisateur
+
 // Texte séparé par un arobase puis un point qui empêche aussi de mettre des caractères spéciaux
 export function isValidEmail(value) {
   if (

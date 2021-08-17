@@ -5,11 +5,9 @@ import { getUserByEmail } from '../DB/users.mjs'
 import { createUser } from '../DB/users.mjs'
 import { errorHandler } from '../middlewares/errorHandler.mjs'
 
-dotenv.config() // Permet d'user des .env
+dotenv.config() // Permet d'user des variables d'environnement
 
-// Gestion côté backend de l'inscription d'un nouvel utilisateur
 // Filtre avant la fonction d'inscription/connexion + Validation des paramètres en backend par rapport au frontend + Vérif email/MDP non vide
-
 export function checkAuthParams(req, res, next) {
   if (
     // On teste strictement les égalités/inégalités par rapport à la dataBase
@@ -70,7 +68,6 @@ export async function signUp(req, res, next) {
         //   data: result,
         //   message: "Inscription de l'utilisateur réussie",
         // }) // 201 dit que le compte est créé avec succès
-        console.log(result);
         const obj = {
           userId: result, // Basculer sur logIn après inscription
           token: jwt.sign(

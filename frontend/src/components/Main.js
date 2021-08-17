@@ -8,9 +8,9 @@ import Profile from './Profile'
 import PostCreate from '../pages/PostCreate'
 import PostEdit from '../pages/PostEdit'
 
-// CSS dans SASS
+// CSS formulaire/forum dans SASS
 
-// Switch gère les routes indépandantes l'une de l'autre et fait la vérif. de page fonctionelle
+// Switch gère les routes indépandantes l'une de l'autre et fait la vérif. de page fonctionelle + redirection
 export default function Main() {
   return (
     <main>

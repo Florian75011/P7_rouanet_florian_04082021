@@ -20,6 +20,7 @@ export async function getProfile(req, res, next) {
   }
 }
 
+// Route de modification de profil
 export async function setProfile(req, res, next) {
   try {
     const { firstName, lastName } = req.body

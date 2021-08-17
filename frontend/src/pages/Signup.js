@@ -90,11 +90,9 @@ export default function Signup() {
       }
       // Envoie au serveur, cible la création de compte:
       const result = await fetchPost('/api/auth/signup', body)
-      console.log(result)
       // Redirection de l'utilisateur inscrit:
       switch (result.status) {
         case 201:
-          console.log('Redirection')
           history.push('/login')
           break
         case 400:

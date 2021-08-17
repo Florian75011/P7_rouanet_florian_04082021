@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-// Base de donnée MYSQL. Create the connection pool. The pool-specific settings are the defaults
+// BDD avec MYSQL dans Node.js - connection pool
 const pool = mysql2.createPool({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
@@ -14,7 +14,7 @@ const pool = mysql2.createPool({
   queueLimit: 0,
 })
 
-// Promesse retournée
+// Promesse retournée pour gèrer l'asynchrone en connexions simultanées à partir d'une seule
 export function sqlQuery(str) {
   return new Promise(async (resolve, reject) => {
     pool.query(str, function (err, results, fields) {
@@ -24,7 +24,7 @@ export function sqlQuery(str) {
   })
 }
 
-// Permet l'échapement de caractère, remplacement automatique
+// Permet l'échapement de caractère, remplacement automatique des apostrophes
 export function sqlEscape(str) {
   return mysql2.escape(str)
 }

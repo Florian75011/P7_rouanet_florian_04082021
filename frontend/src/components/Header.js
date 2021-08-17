@@ -4,6 +4,8 @@ import { Link, useHistory } from 'react-router-dom'
 import imgHeader from '../assets/icon-above-font.png'
 import colors from '../colors'
 
+// Header est présent sur toutes les pages
+
 const HeaderSC = styled.header`
   display: flex;
   height: 50vh;
@@ -44,7 +46,7 @@ export default function Header(props) {
   })
 
   function logOut(e) {
-    e.preventDefault()
+    e.preventDefault() // Façon pour soumettre convenablement une seule fois chaque requête auprès du HTML
     localStorage.removeItem('accessToken')
     history.push('/login')
   }
