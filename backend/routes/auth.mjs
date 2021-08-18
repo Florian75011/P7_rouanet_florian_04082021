@@ -103,7 +103,8 @@ export async function logIn(req, res, next) {
       if (match === true) {
         // Créer le token, et envoyer une réponse - Créer un objet prenant en compte un userId avec le résultat du searchUser + le token secret
         const obj = {
-          userId: searchUser.id, // Contenu d'un jeton: user de la doc API + ID de MongoDB
+          userId: searchUser.id,
+          userRole: searchUser.role, // Envoie user et role
           token: jwt.sign(
             { userId: searchUser.id, userRole: searchUser.role },
             process.env.TOKEN_SECRET,

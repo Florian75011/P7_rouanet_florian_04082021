@@ -60,8 +60,8 @@ export async function postCreate(req, res, next) {
     } else {
       errorHandler(req, res, 400)
     }
-    const result = await createPost(userId, title, text, image)
-    res.status(201).json({ data: result, message: "C'est fonctionnel" })
+    // const result = await createPost(userId, title, text, image)
+    // res.status(201).json({ data: result, message: "C'est fonctionnel" })
   } catch (err) {
     errorHandler(req, res, err)
   }
