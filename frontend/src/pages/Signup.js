@@ -77,7 +77,7 @@ export default function Signup() {
     return success
   }
 
-  // Une fois que l'on peut soummetre, récupération de toutes les données
+  // Une fois que l'on peut soummetre, récupération de toutes les données d'inscription
   async function handleSubmit(e) {
     e.preventDefault()
 

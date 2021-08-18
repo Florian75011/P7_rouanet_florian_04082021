@@ -11,7 +11,6 @@ export async function uploadFile(method, url, file, body) {
       options.headers.authorization =
         'Bearer ' + localStorage.getItem('accessToken')
     }
-    console.log(options);
     if (['post', 'put'].includes(method.toLowerCase())) {
       const response = await axios[method](
         'http://localhost:5000' + url,

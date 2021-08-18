@@ -61,7 +61,7 @@ export default function Header(props) {
         <p>Notre base de connexion</p>
         {!token && (
           <>
-              <Link to="/">Connexion</Link>
+              <Link to="/login">Connexion</Link>
               <Link to="/signup">Inscription</Link>
           </>
         )}

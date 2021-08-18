@@ -17,6 +17,7 @@ import { userDelete } from './DB/users.mjs'
 import { upload } from './middlewares/upload.mjs'
 import path, { dirname } from 'path' // Module Node pour gérer les chemins de fichiers
 import { fileURLToPath } from 'url'
+import { commentCreate, commentEdit } from './routes/comment.mjs'
 
 const app = express()
 app.use(express.json()) // Permet de recevoir des corps de requête en JSON
@@ -40,6 +41,8 @@ app.get('/api/post/:id', auth, getPostForEdit)
 app.put('/api/post/:id', auth, upload, postEdit)
 app.delete('/api/post/:id', auth, postDelete) // Suppression
 app.delete('/api/post/user', auth, userDelete)
+app.post('/api/comment', auth, commentCreate) // Additionnel
+app.put('/api/comment/:id', auth, commentEdit)
 
 // Connexion au port backend
 app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le serveur Node va tourner continuellement

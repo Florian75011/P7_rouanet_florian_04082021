@@ -1,4 +1,5 @@
 import { sqlEscape, sqlQuery } from './DB.mjs'
+import { defaultFields as commentFields } from './comments.mjs'
 
 // Gestion des publications en MYSQL
 const tableName = 'posts'
@@ -39,6 +40,24 @@ export async function getAllPosts(fields = defaultFields) {
     FROM ${tableName}
     JOIN users
     ON post_user_id = user_id
+    `)
+    for (const row of rows) {
+      row.comments = await getPostComments(row.id)
+    }
+    return rows // Rows essaie d'obtenir des données
+  } catch (err) {
+    throw err
+  }
+}
+
+export async function getPostComments(postId, fields = defaultFields) {
+  try {
+    const rows = await sqlQuery(`
+    SELECT ${commentFields}, user_first_name AS userFirstName, user_last_name AS userLastName 
+    FROM comments
+    JOIN users
+    ON comment_user_id = user_id
+    WHERE comment_post_id = ${postId}
     `)
     return rows // Rows essaie d'obtenir des données
   } catch (err) {
@@ -102,5 +121,3 @@ export async function deletePost(id) {
     throw err
   }
 }
-
-// Additionnel : gestion des commentaires

@@ -4,7 +4,7 @@ import Signup from '../pages/Signup'
 import Error404 from '../pages/Error404'
 import { Switch, Route } from 'react-router-dom'
 import Posts from '../pages/Posts'
-import Profile from './Profile'
+import Profile from '../pages/Profile'
 import PostCreate from '../pages/PostCreate'
 import PostEdit from '../pages/PostEdit'
 

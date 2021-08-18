@@ -76,7 +76,7 @@ export async function signUp(req, res, next) {
             { expiresIn: '12h' }
           ), // L'utilisateur existe vraiment, donc on lui renvoie un jeton/token ; Crypte information pour la décrypter ensuite
         }
-        res.status(200).json(obj)
+        res.status(201).json(obj)
       } else {
         errorHandler(req, res, 400, 'Email déjà utilisé')
       }

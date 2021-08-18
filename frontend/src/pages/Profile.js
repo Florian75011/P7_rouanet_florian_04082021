@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { fetchGet, fetchPost } from '../utils/fetch'
-import Loader from './Loader'
+import Loader from '../components/Loader'
 
 export default function Profile() {
   const [fieldFirstName, setFieldFirstName] = useState('')
@@ -30,6 +30,7 @@ export default function Profile() {
       }
     }
     loadProfile()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // lancer ceci seulement au chargement de la page après vérif (protection frontend)
 
   function handleChangeFirstName(e) {

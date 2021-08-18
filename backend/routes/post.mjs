@@ -8,6 +8,7 @@ import {
 import { isOwner } from '../middlewares/auth.mjs'
 import { errorHandler } from '../middlewares/errorHandler.mjs'
 import { upload } from '../middlewares/upload.mjs'
+import fs from 'fs'
 
 export async function getPostsList(req, res, next) {
   try {
@@ -48,7 +49,7 @@ export async function getPostForEdit(req, res, next) {
 export async function postCreate(req, res, next) {
   try {
     let body = req.body
-    // SI une image est uploadée avec
+    // Si une image est uploadée
     if (req.file) {
       body = JSON.parse(req.body.data)
       body.image = req.file.filename
@@ -60,8 +61,6 @@ export async function postCreate(req, res, next) {
     } else {
       errorHandler(req, res, 400)
     }
-    // const result = await createPost(userId, title, text, image)
-    // res.status(201).json({ data: result, message: "C'est fonctionnel" })
   } catch (err) {
     errorHandler(req, res, err)
   }
@@ -76,11 +75,24 @@ export async function postEdit(req, res, next) {
         // Permission donnée si le post est bien modifié par son créateur
         if (isOwner(req, res, searchPost.userId)) {
           let body = { title: '', text: '', image: '' }
+          // Si une image est uploadée avec
           if (req.file) {
+            if (searchPost.imagePath) {
+              // fonction FS de suppression d'image
+              fs.unlink(`uploads/${searchPost.imagePath}`, async (err) => {
+                if (err) console.log(err)
+              })
+            }
             body = JSON.parse(req.body.data)
             body.image = req.file.filename
           } else {
             body = req.body
+            // Si une image était bien enregistrée et qu'elle a été supprimée du frontend, on supprime l'image précédente
+            if (searchPost.imagePath && !body.image) {
+              fs.unlink(`uploads/${searchPost.imagePath}`, async (err) => {
+                if (err) console.log(err)
+              })
+            }
           }
           const { title, text, image } = body
           if (title && text) {
@@ -111,6 +123,13 @@ export async function postDelete(req, res, next) {
       if (searchPost) {
         // Permission donnée si le post est bien modifier par son créateur
         if (isOwner(req, res, searchPost.userId)) {
+          // Gestion de la suppression d'image
+          if (searchPost.imagePath) {
+            // fonction FS de suppression d'image
+            fs.unlink(`uploads/${searchPost.imagePath}`, async (err) => {
+              if (err) console.log(err)
+            })
+          }
           await deletePost(searchPost.id)
             .then(() => res.status(200).json({ message: 'Message supprimé' }))
             .catch((error) => errorHandler(req, res, error.status))

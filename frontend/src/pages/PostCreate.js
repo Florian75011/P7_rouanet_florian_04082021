@@ -73,11 +73,13 @@ export default function PostCreate() {
         image: imageFilePath,
       }
       // Envoie au serveur, cible la création de compte:
+      setDisplayPage(false)
       if (imageUpload) {
         await uploadFile('post', '/api/post/', imageUpload, body)
       } else {
         await fetchPost('/api/post', body)
       }
+      setDisplayPage(true)
       // Redirection de l'utilisateur inscrit:
       history.push('/')
     }

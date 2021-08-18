@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
-import { fetchDelete, fetchGet, fetchPost, fetchPut } from '../utils/fetch'
+import { fetchDelete, fetchGet, fetchPut } from '../utils/fetch'
 import queryString from 'query-string'
 import { uploadFile } from '../utils/uploadFile'
 
@@ -26,7 +26,6 @@ export default function PostEdit() {
   useEffect(() => {
     async function loadPost(id) {
       const result = await fetchGet('/api/post/' + id)
-      console.log(result.data);
       if (result.status === 200) {
         setPostUserId(result.data.userId)
         setFieldTitle(result.data.title)
@@ -45,6 +44,7 @@ export default function PostEdit() {
     } else {
       setPageError({ code: 404, message: 'Page introuvable' }) // ID inexistant, donc erreur 404
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function handleChangeTitle(e) {
@@ -102,11 +102,13 @@ export default function PostEdit() {
       }
       // Envoie au serveur, cible la création de compte:
       const postId = Number(queryString.parse(history.location.search).id) // Garde les nombres pour l'id des pages
+      setDisplayPage(false)
       if (imageUpload) {
         await uploadFile('put', '/api/post/' + postId, imageUpload, body)
       } else {
         await fetchPut('/api/post/' + postId, body)
       }
+      setDisplayPage(true)
       // Redirection de l'utilisateur inscrit:
       history.push('/')
     }
@@ -114,11 +116,16 @@ export default function PostEdit() {
 
   async function handleDelete(e) {
     e.preventDefault()
+    let msg = window.confirm(
+      'Êtes-vous sûr de vouloir supprimer cette publication ?'
+    )
+    if (msg === false) {
+        return
+      }
     // Envoie au serveur, cible la création de compte:
     await fetchDelete('/api/post/' + postId)
       //   // Redirection de l'utilisateur inscrit:
       .then(() => {
-        console.log('ok')
         history.push('/')
       })
       .catch((error) => {
@@ -139,7 +146,10 @@ export default function PostEdit() {
           <img alt="" src={URL.createObjectURL(imageUpload)} />
         ) : (
           imageFilePath && (
-            <img alt="" src={`http://localhost:5000/uploads/${imageFilePath}`} />
+            <img
+              alt=""
+              src={`http://localhost:5000/uploads/${imageFilePath}`}
+            />
           )
         )}
         {(imageUpload || imageFilePath) && (
@@ -159,7 +169,7 @@ export default function PostEdit() {
         />
         {errorText && <p className="form-error">{errorText}</p>}
         <button onClick={handleSubmit}>Modifier votre publication</button>
-        {localStorage.userId == postUserId && (
+        {parseInt(localStorage.userId) === parseInt(postUserId) && (
           <button onClick={handleDelete}>Supprimer votre publication</button>
         )}
       </form>
