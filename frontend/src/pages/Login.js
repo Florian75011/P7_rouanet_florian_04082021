@@ -64,6 +64,7 @@ export default function Login() {
       if (result.status === 200) {
         localStorage.setItem('accessToken', result.token)
         localStorage.setItem('userId', result.userId)
+        localStorage.setItem('userRole', result.userRole)
         history.push('/')
       }
     }

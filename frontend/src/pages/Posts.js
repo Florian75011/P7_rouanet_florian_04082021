@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
-import { fetchGet } from '../utils/fetch'
+import { fetchDelete, fetchGet } from '../utils/fetch'
 import styled from 'styled-components'
 import colors from '../colors'
 
@@ -61,6 +61,26 @@ export default function Posts() {
     history.push('/edit_post?id=' + e.target.value)
   }
 
+  // Bouton de supression de tous les posts qui apparaît uniquement pour l'admin
+  async function handleDeleteAdmin(e) {
+    // e.preventDefault()
+    let msg = window.confirm("Êtes-vous sûr de vouloir supprimer cette publication ?")
+    if (msg === false) {
+      return
+    }
+    // Envoie au serveur, cible la création de compte:
+    await fetchDelete('/api/post/' + e.target.value)
+      //   // Redirection de l'utilisateur inscrit:
+      .then(() => {
+        // Gestion de suppression frontend du message par l'admin
+        e.target.parentElement.style.display = 'none'
+        console.log(e.target);
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
+
   return (
     <Loader loadOn={displayPage === true}>
       <div>Bienvenue sur le forum de notre boîte</div>
@@ -79,6 +99,11 @@ export default function Posts() {
                 })}
               </time>
               <p>{post.text}</p>
+              {localStorage.userRole === '1' && (
+                <button onClick={handleDeleteAdmin} value={post.id}>
+                  Supprimer cette publication
+                </button>
+              )}
               {localStorage.userId == post.userId && (
                 <button onClick={handleEditPost} value={post.id}>
                   Modifier
