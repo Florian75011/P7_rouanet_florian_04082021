@@ -1,16 +1,21 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
 import { fetchPost } from '../utils/fetch'
+import { uploadFile } from '../utils/uploadFile'
 
 export default function PostCreate() {
   const [fieldTitle, setFieldTitle] = useState('')
   const [fieldText, setFieldText] = useState('')
+  const [imageFilePath, setImageFilePath] = useState('') // Chemin d'une image sauvegardée
+  const [imageUpload, setImageUpload] = useState(null) // Image en cours d'upload
   const [errorTitle, setErrorTitle] = useState('')
   const [errorText, setErrorText] = useState('')
 
   const history = useHistory()
   const [displayPage, setDisplayPage] = useState(true)
+
+  const inputFile = useRef(null)
 
   function handleChangeTitle(e) {
     e.preventDefault()
@@ -20,6 +25,24 @@ export default function PostCreate() {
   function handleChangeText(e) {
     e.preventDefault()
     setFieldText(e.target.value)
+  }
+
+  function handleChangeImage(e) {
+    e.preventDefault()
+    const file = Array.from(e.target.files)[0] // Tenter de convertir les fichiers envoyés
+    setImageUpload(file)
+  }
+
+  function handleDeleteImage(e) {
+    e.preventDefault()
+    setImageUpload(null)
+    inputFile.current.value = '' // Vider l'image précédemment uploadé
+    if (imageFilePath) {
+      if (window.confirm("Voulez-vous supprimer l'image de publication ?")) {
+        // alerte qui renvoie un bouléen vrai ou faux
+        setImageFilePath('')
+      }
+    }
   }
 
   function canSubmit() {
@@ -47,39 +70,41 @@ export default function PostCreate() {
         userId: localStorage.userId,
         title: fieldTitle,
         text: fieldText,
-        // image: fieldImage,
+        image: imageFilePath,
       }
       // Envoie au serveur, cible la création de compte:
-      await fetchPost('/api/post', body)
-        //   // Redirection de l'utilisateur inscrit:
-        .then((res) => {
-          history.push('/')
-        })
-        .catch((error) => {
-          throw error
-        })
+      if (imageUpload) {
+        await uploadFile('post', '/api/post/', imageUpload, body)
+      } else {
+        await fetchPost('/api/post', body)
+      }
+      // Redirection de l'utilisateur inscrit:
+      history.push('/')
     }
   }
-
-  /*
-  var formdata = new FormData();
-  formdata.append("title", "coucou");
-  formdata.append("text", "content");
-  formdata.append("image", fileInput.files[0], "Portrait.png");
-  formdata.append("userId", "442");
-
-  var requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  body: formdata,
-  redirect: 'follow'
-  };
-  */
 
   return (
     <Loader loadOn={displayPage === true}>
       <form>
-        <input type="file" />
+        <input
+          type="file"
+          ref={inputFile}
+          onChange={handleChangeImage}
+          accept="image/png, image/jpeg, image/gif"
+        />
+        {imageUpload ? (
+          <img alt="" src={URL.createObjectURL(imageUpload)} />
+        ) : (
+          imageFilePath && (
+            <img
+              alt=""
+              src={`http://localhost:5000/uploads/${imageFilePath}`}
+            />
+          )
+        )}
+        {(imageUpload || imageFilePath) && (
+          <button onClick={handleDeleteImage}>Supprimer votre image</button>
+        )}
         <input
           type="text"
           placeholder="Entrez le titre"

@@ -47,11 +47,19 @@ export async function getPostForEdit(req, res, next) {
 // Appeler la fonction POST
 export async function postCreate(req, res, next) {
   try {
-    let image = null;
-    if (req.file ==!undefined) {
-      image = req.file.path;
+    let body = req.body
+    // SI une image est uploadée avec
+    if (req.file) {
+      body = JSON.parse(req.body.data)
+      body.image = req.file.filename
     }
-    const { userId, title, text } = req.body
+    const { userId, title, text, image } = body
+    if (title && text) {
+      const result = await createPost(userId, title, text, image)
+      res.status(201).json({ data: result, message: "C'est fonctionnel" })
+    } else {
+      errorHandler(req, res, 400)
+    }
     const result = await createPost(userId, title, text, image)
     res.status(201).json({ data: result, message: "C'est fonctionnel" })
   } catch (err) {
@@ -65,11 +73,22 @@ export async function postEdit(req, res, next) {
     if (req.params.id && !isNaN(Number(req.params.id))) {
       const searchPost = await getPostById(req.params.id) // On récupère les paramètres d'URL si c'est bien un nombre
       if (searchPost) {
-        // Permission donnée si le post est bien modifier par son créateur
+        // Permission donnée si le post est bien modifié par son créateur
         if (isOwner(req, res, searchPost.userId)) {
-          const { title, text } = req.body
-          const result = await editPost(req.params.id, title, text)
-          res.status(200).json({ data: result, message: 'Message modifié' })
+          let body = { title: '', text: '', image: '' }
+          if (req.file) {
+            body = JSON.parse(req.body.data)
+            body.image = req.file.filename
+          } else {
+            body = req.body
+          }
+          const { title, text, image } = body
+          if (title && text) {
+            const result = await editPost(req.params.id, title, text, image)
+            res.status(200).json({ data: result, message: 'Message modifié' })
+          } else {
+            errorHandler(req, res, 400)
+          }
         } else {
           errorHandler(req, res, 403)
         }

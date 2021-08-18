@@ -15,6 +15,8 @@ import {
 import { getProfile, setProfile } from './routes/user.mjs'
 import { userDelete } from './DB/users.mjs'
 import { upload } from './middlewares/upload.mjs'
+import path, { dirname } from 'path' // Module Node pour gérer les chemins de fichiers
+import { fileURLToPath } from 'url'
 
 const app = express()
 app.use(express.json()) // Permet de recevoir des corps de requête en JSON
@@ -22,15 +24,20 @@ app.use('/images/assets', express.static('assets')) // Si on copie
 app.use(helmet()) // Module de sécurité évitant certaines formes d'attaques informatiques courantes
 app.use(cors())
 
+// Création de routes
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))) // Indique que le dossier possède des fichiers statiques
+
 // Création de la route API
 app.post('/api/auth/signup', checkAuthParams, signUp) // Connexion
 app.post('/api/auth/login', checkAuthParams, logIn)
 app.get('/api/user/profile', auth, getProfile) // Profil
 app.post('/api/user/profile', auth, setProfile)
 app.get('/api/post', auth, getPostsList) // Récupération
-app.get('/api/post/:id', auth, getPostForEdit)
 app.post('/api/post', auth, upload, postCreate) // Création & modification + image
-app.post('/api/post/:id', auth, postEdit)
+app.get('/api/post/:id', auth, getPostForEdit)
+app.put('/api/post/:id', auth, upload, postEdit)
 app.delete('/api/post/:id', auth, postDelete) // Suppression
 app.delete('/api/post/user', auth, userDelete)
 
@@ -55,8 +62,3 @@ initTables()
 //   ) // Authorisation d'utiliser certaines méthodes
 //   next()
 // })
-
-// // Création de routes
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-// app.use("/images", express.static(path.join(__dirname, "images"))); // Indique que le dossier possède des fichiers statiques

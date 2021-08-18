@@ -14,7 +14,7 @@ const mimeTypes = {
 const storage = multer.diskStorage({
   // Dossier où les images seront sauvegardés + Réécriture du nom des fichiers
   destination: (req, file, callback) => {
-    const dir = 'assets' // Notre futur dossier images
+    const dir = 'uploads' // Notre futur dossier images
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir) // Vérification du dossier "s'il existe" pour éviter le plantage et le créer
     }

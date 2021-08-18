@@ -4,7 +4,7 @@ const serverUrl = 'http://localhost:5000'
 async function fetchBase(method, routeUrl, body = null) {
   const headers = new Headers()
   headers.append('Content-Type', 'application/json')
-  const token = JSON.parse(localStorage.getItem('accessToken'))
+  const token = localStorage.getItem('accessToken')
   if (token) {
     headers.append('Authorization', 'Bearer ' + token)
   }
@@ -31,8 +31,11 @@ export async function fetchPost(routeUrl, body) {
   return await fetchBase('POST', routeUrl, body)
 }
 
-export async function fetchDelete(routeUrl) {
+export async function fetchPut(routeUrl, body) {
+  return await fetchBase('PUT', routeUrl, body)
+}
 
+export async function fetchDelete(routeUrl) {
   return await fetchBase('DELETE', routeUrl)
 }
 

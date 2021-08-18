@@ -62,8 +62,8 @@ export default function Login() {
       // Envoie serveur:
       const result = await fetchPost('/api/auth/login', body)
       if (result.status === 200) {
-        localStorage.setItem('accessToken', JSON.stringify(result.token))
-        localStorage.setItem('userId', JSON.stringify(result.userId))
+        localStorage.setItem('accessToken', result.token)
+        localStorage.setItem('userId', result.userId)
         history.push('/')
       }
     }

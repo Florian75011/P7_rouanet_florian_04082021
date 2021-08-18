@@ -8,7 +8,7 @@ const defaultFields = [
   'post_user_id AS userId',
   'post_title AS title',
   'post_text AS text',
-  'post_image_path AS imgPath',
+  'post_image_path AS imagePath',
   'post_creation_date AS creationDate',
 ]
 
@@ -60,11 +60,13 @@ export async function getPostById(id, fields = defaultFields) {
 }
 
 // Créer la fonction de POST d'une nouvelle publication qui sera appelée dans le fichier route/post.mjs pour faire chaque post (MYSQL)
-export async function createPost(userId, title, text, images) {
+export async function createPost(userId, title, text, image = '') {
   try {
     const result = await sqlQuery(
       `INSERT INTO ${tableName} (post_user_id, post_title, post_text, post_image_path)
-      VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(text)}, ${sqlEscape(images)})`
+      VALUES (${sqlEscape(userId)}, ${sqlEscape(title)}, ${sqlEscape(
+        text
+      )}, ${sqlEscape(image)})`
     )
     return result.insertId // Result est le résultat d'une action
   } catch (err) {
@@ -73,11 +75,13 @@ export async function createPost(userId, title, text, images) {
 }
 
 // Fonction pour éditer les post à partir de la BDD
-export async function editPost(id, title, text) {
+export async function editPost(id, title, text, image = '') {
   try {
     const result = await sqlQuery(
       `UPDATE ${tableName}
-        SET post_title = ${sqlEscape(title)}, post_text = ${sqlEscape(text)}
+        SET post_title = ${sqlEscape(title)}, post_text = ${sqlEscape(
+        text
+      )}, post_image_path = ${sqlEscape(image)}
         WHERE post_id = ${id}`
     )
     return result.insertId
