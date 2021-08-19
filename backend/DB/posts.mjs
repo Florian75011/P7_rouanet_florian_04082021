@@ -20,7 +20,7 @@ export async function initPostsTable() {
     const result = await sqlQuery(`
         CREATE TABLE IF NOT EXISTS ${tableName} (
             post_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            post_user_id INT(11) NOT NULL,
+            post_user_id INT(11) NOT NULL, FOREIGN KEY (post_user_id) REFERENCES users(user_id) ON DELETE CASCADE,
             post_title VARCHAR(255) NOT NULL,
             post_text TEXT NOT NULL,
             post_image_path VARCHAR(255),

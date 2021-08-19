@@ -18,8 +18,8 @@ export async function initCommentsTable() {
     const result = await sqlQuery(`
         CREATE TABLE IF NOT EXISTS ${tableName} (
             comment_id INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            comment_user_id INT(11) NOT NULL,
-            comment_post_id INT(11) NOT NULL,
+            comment_user_id INT(11) NOT NULL, FOREIGN KEY (comment_user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+            comment_post_id INT(11) NOT NULL, FOREIGN KEY (comment_post_id) REFERENCES posts(post_id) ON DELETE CASCADE,
             comment_text TEXT NOT NULL,
             comment_creation_date DATETIME DEFAULT CURRENT_TIMESTAMP
         )
@@ -70,7 +70,7 @@ export async function editComment(id, text) {
 }
 
 // Fonction pour supprimer les commentaire à partir de la BDD
-export async function deleteComment(userId) {
+export async function deleteComment(id) {
   try {
     const result = await sqlQuery(
       `DELETE FROM ${tableName}

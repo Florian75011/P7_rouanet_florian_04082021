@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
 import { fetchDelete, fetchGet, fetchPost, fetchPut } from '../utils/fetch'
@@ -15,6 +15,9 @@ const PostsSC = styled.div`
     img {
       height: auto;
       width: 100%;
+    }
+    button {
+      margin: 5px;
     }
   }
 `
@@ -138,7 +141,25 @@ export default function Posts() {
     setFieldComment(comment.text)
   }
 
-  async function handleDeleteComment(e) {}
+  async function handleDeleteComment(e) {
+    e.preventDefault()
+    let msg = window.confirm(
+      'Êtes-vous sûr de vouloir supprimer ce commentaire ?'
+    )
+    if (msg === false) {
+      return
+    }
+    // Envoie au serveur, cible la création de compte:
+    await fetchDelete('/api/comment/' + e.target.value)
+      //   // Redirection de l'utilisateur inscrit:
+      .then(() => {
+        e.target.parentElement.style.display = 'none'
+        // history.push('/')
+      })
+      .catch((error) => {
+        throw error
+      })
+  }
 
   // Affichage du forum
   return (
@@ -178,17 +199,25 @@ export default function Posts() {
                       <Linkify>
                         <p>{comment.text}</p>
                       </Linkify>
-                      <button
-                        value={comment.id}
-                        onClick={(e) =>
-                          handleStartCommentEdit(e, post.id, comment)
-                        }
-                      >
-                        Editer
-                      </button>
-                      <button value={comment.id} onClick={handleDeleteComment}>
-                        Supprimer
-                      </button>
+                      {parseInt(localStorage.userId) ===
+                        parseInt(comment.userId) && (
+                        <Fragment>
+                          <button
+                            value={comment.id}
+                            onClick={(e) =>
+                              handleStartCommentEdit(e, post.id, comment)
+                            }
+                          >
+                            Editer
+                          </button>
+                          <button
+                            value={comment.id}
+                            onClick={handleDeleteComment}
+                          >
+                            Supprimer
+                          </button>
+                        </Fragment>
+                      )}
                     </div>
                   )
                 })}

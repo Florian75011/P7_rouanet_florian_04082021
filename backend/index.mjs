@@ -17,7 +17,8 @@ import { userDelete } from './DB/users.mjs'
 import { upload } from './middlewares/upload.mjs'
 import path, { dirname } from 'path' // Module Node pour gérer les chemins de fichiers
 import { fileURLToPath } from 'url'
-import { commentCreate, commentEdit } from './routes/comment.mjs'
+import { commentCreate, commentEdit, commentDelete } from './routes/comment.mjs'
+import { deleteProfile } from './routes/user.mjs'
 
 const app = express()
 app.use(express.json()) // Permet de recevoir des corps de requête en JSON
@@ -40,7 +41,8 @@ app.post('/api/post', auth, upload, postCreate) // Création & modification + im
 app.get('/api/post/:id', auth, getPostForEdit)
 app.put('/api/post/:id', auth, upload, postEdit)
 app.delete('/api/post/:id', auth, postDelete) // Suppression
-app.delete('/api/post/user', auth, userDelete)
+app.delete('/api/user', auth, deleteProfile)
+app.delete('/api/comment/:id', auth, commentDelete)
 app.post('/api/comment', auth, commentCreate) // Additionnel
 app.put('/api/comment/:id', auth, commentEdit)
 

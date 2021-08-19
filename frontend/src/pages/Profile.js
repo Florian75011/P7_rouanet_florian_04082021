@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
-import { fetchGet, fetchPost } from '../utils/fetch'
+import { fetchDelete, fetchGet, fetchPost } from '../utils/fetch'
 import Loader from '../components/Loader'
 
 export default function Profile() {
@@ -60,9 +60,9 @@ export default function Profile() {
     return success
   }
 
+  // Modification du profile
   async function handleSubmit(e) {
     e.preventDefault()
-
     if (canSubmit()) {
       const body = {
         firstName: fieldFirstName,
@@ -84,6 +84,26 @@ export default function Profile() {
     }
   }
 
+  async function handleDeleteProfile(e) {
+    e.preventDefault()
+    // Alert pour prévenir de la suppression
+    let msg = window.confirm(
+      'Êtes-vous sûr de vouloir supprimer cette publication ?'
+    )
+    if (msg === false) {
+      return
+    }
+    // Envoie au serveur, cible la création de compte:
+    await fetchDelete('/api/user')
+    .then(() => {
+      localStorage.clear()
+      history.push('/login')
+    })
+    .catch((error) => {
+      throw error
+    })
+  }
+
   return (
     <Loader loadOn={displayPage === true}>
       <form>
@@ -102,7 +122,7 @@ export default function Profile() {
         />
         {errorLastName && <p className="form-error">{errorLastName}</p>}
         <button onClick={handleSubmit}>Modifier le profil</button>
-        <button>Supprimer le profil</button>
+        <button onClick={handleDeleteProfile}>Supprimer le profil</button>
       </form>
     </Loader>
   )
