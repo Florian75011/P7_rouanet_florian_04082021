@@ -38,5 +38,3 @@ export async function fetchPut(routeUrl, body) {
 export async function fetchDelete(routeUrl) {
   return await fetchBase('DELETE', routeUrl)
 }
-
-// Envoyer token

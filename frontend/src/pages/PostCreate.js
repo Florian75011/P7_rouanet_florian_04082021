@@ -3,6 +3,7 @@ import { useHistory } from 'react-router'
 import Loader from '../components/Loader'
 import { fetchPost } from '../utils/fetch'
 import { uploadFile } from '../utils/uploadFile'
+import { toast } from 'react-toastify'
 
 export default function PostCreate() {
   const [fieldTitle, setFieldTitle] = useState('')
@@ -62,6 +63,7 @@ export default function PostCreate() {
     return success
   }
 
+  // La création de publication
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -74,10 +76,16 @@ export default function PostCreate() {
       }
       // Envoie au serveur, cible la création de compte:
       setDisplayPage(false)
+      let result
       if (imageUpload) {
-        await uploadFile('post', '/api/post/', imageUpload, body)
+        result = await uploadFile('post', '/api/post/', imageUpload, body)
       } else {
-        await fetchPost('/api/post', body)
+        result = await fetchPost('/api/post', body)
+      }
+      if (result.status === 201) {
+        toast.success(result.message, {autoClose: 2000})
+      } else {
+        toast.error(result.message, {autoClose: 2000})
       }
       setDisplayPage(true)
       // Redirection de l'utilisateur inscrit:

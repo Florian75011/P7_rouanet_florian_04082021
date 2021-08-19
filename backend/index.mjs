@@ -51,19 +51,3 @@ app.listen(5000, () => console.log('Serveur actif sur le port ' + 5000)) // Le s
 
 // Création des tables
 initTables()
-
-// import dotenv from "dotenv";
-// dotenv.config(); // Variable d'environnement
-
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', '*') // Tout le monde a le droit d'accéder à l'API
-//   res.setHeader(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
-//   ) // Authorisation d'utiliser certaines en-têtes
-//   res.setHeader(
-//     'Access-Control-Allow-Methods',
-//     'GET, POST, PUT, DELETE, PATCH, OPTIONS'
-//   ) // Authorisation d'utiliser certaines méthodes
-//   next()
-// })

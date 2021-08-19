@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import { fetchDelete, fetchGet, fetchPost } from '../utils/fetch'
 import Loader from '../components/Loader'
+import { toast } from 'react-toastify'
 
 export default function Profile() {
   const [fieldFirstName, setFieldFirstName] = useState('')
@@ -73,13 +74,11 @@ export default function Profile() {
       // Redirection de l'utilisateur inscrit:
       switch (result.status) {
         case 200:
+          toast.success(result.message, {autoClose: 2000})
           history.push('/')
           break
-        case 400:
-          console.log('Erreur')
-          break
         default:
-          console.log('Erreur')
+          toast.error(result.message, {autoClose: 2000})
       }
     }
   }
@@ -87,15 +86,15 @@ export default function Profile() {
   async function handleDeleteProfile(e) {
     e.preventDefault()
     // Alert pour prévenir de la suppression
-    let msg = window.confirm(
+    if (!window.confirm(
       'Êtes-vous sûr de vouloir supprimer cette publication ?'
-    )
-    if (msg === false) {
+    )) {
       return
     }
     // Envoie au serveur, cible la création de compte:
     await fetchDelete('/api/user')
-    .then(() => {
+    .then((result) => {
+      toast.success(result.message, {autoClose: 2000})
       localStorage.clear()
       history.push('/login')
     })

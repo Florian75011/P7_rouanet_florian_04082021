@@ -4,6 +4,7 @@ import Loader from '../components/Loader'
 import { fetchDelete, fetchGet, fetchPut } from '../utils/fetch'
 import queryString from 'query-string'
 import { uploadFile } from '../utils/uploadFile'
+import { toast } from 'react-toastify'
 
 // Une copie de PostCreate.js sauf pour la gestion de l'ID de Post
 export default function PostEdit() {
@@ -92,6 +93,7 @@ export default function PostEdit() {
     return success
   }
 
+  // Modification de la publication
   async function handleSubmit(e) {
     e.preventDefault()
     if (canSubmit()) {
@@ -103,10 +105,16 @@ export default function PostEdit() {
       // Envoie au serveur, cible la création de compte:
       const postId = Number(queryString.parse(history.location.search).id) // Garde les nombres pour l'id des pages
       setDisplayPage(false)
+      let result
       if (imageUpload) {
-        await uploadFile('put', '/api/post/' + postId, imageUpload, body)
+        result = await uploadFile('put', '/api/post/' + postId, imageUpload, body)
       } else {
-        await fetchPut('/api/post/' + postId, body)
+        result = await fetchPut('/api/post/' + postId, body)
+      }
+      if (result.status === 200) {
+        toast.success(result.message, {autoClose: 2000})
+      } else {
+        toast.error(result.message, {autoClose: 2000})
       }
       setDisplayPage(true)
       // Redirection de l'utilisateur inscrit:

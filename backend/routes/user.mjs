@@ -48,7 +48,7 @@ export async function deleteProfile(req, res, next) {
       const searchUser = await getUserById(decoded.userId) // await car communique avec la base de donnée
       if (searchUser) {
         await userDelete(decoded.userId)
-        res.status(200).json({ message: 'Compte mis à jour !' })
+        res.status(200).json({ message: 'Compte supprimé !' })
       } else {
         throw new Error('Utilisateur connecté introuvable') // Création d'erreur éventuelle
       }

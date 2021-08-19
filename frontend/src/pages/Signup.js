@@ -2,6 +2,7 @@ import { useHistory } from 'react-router'
 import { useState } from 'react'
 import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
+import { toast } from 'react-toastify'
 
 export default function Signup() {
   // Variables contenants nos champs et nos erreurs - hooks
@@ -93,13 +94,11 @@ export default function Signup() {
       // Redirection de l'utilisateur inscrit:
       switch (result.status) {
         case 201:
+          toast.success(result.message, { autoClose: 2000 })
           history.push('/login')
           break
-        case 400:
-          console.log('Erreur')
-          break
         default:
-          console.log('Erreur')
+          toast.error(result.message, { autoClose: 2000 })
       }
     }
   }

@@ -5,6 +5,7 @@ import { fetchDelete, fetchGet, fetchPost, fetchPut } from '../utils/fetch'
 import styled from 'styled-components'
 import colors from '../colors'
 import Linkify from 'react-linkify'
+import { toast } from 'react-toastify'
 
 const PostsSC = styled.div`
   div {
@@ -18,6 +19,9 @@ const PostsSC = styled.div`
     }
     button {
       margin: 5px;
+    }
+    .comment {
+      box-shadow: 11px 6px 6px ${(props) => props.shadowColor};
     }
   }
 `
@@ -114,8 +118,11 @@ export default function Posts() {
     setDisplayPage(false)
     const result = await fetchPost('/api/comment/', body)
     if (result.status === 201) {
+      toast.success(result.message, {autoClose: 2000})
       await loadPosts()
       handleCancelComment(e)
+    } else {
+      toast.error(result.message, {autoClose: 2000})
     }
     setDisplayPage(true)
   }
@@ -128,8 +135,11 @@ export default function Posts() {
     setDisplayPage(false)
     const result = await fetchPut('/api/comment/' + commentToEdit, body)
     if (result.status === 200) {
+      toast.success(result.message, {autoClose: 2000})
       await loadPosts()
       handleCancelComment(e)
+    } else {
+      toast.error(result.message, {autoClose: 2000})
     }
     setDisplayPage(true)
   }
@@ -150,15 +160,16 @@ export default function Posts() {
       return
     }
     // Envoie au serveur, cible la création de compte:
-    await fetchDelete('/api/comment/' + e.target.value)
+    setDisplayPage(false)
+    const result = await fetchDelete('/api/comment/' + e.target.value)
       //   // Redirection de l'utilisateur inscrit:
-      .then(() => {
-        e.target.parentElement.style.display = 'none'
-        // history.push('/')
-      })
-      .catch((error) => {
-        throw error
-      })
+      await loadPosts()
+      setDisplayPage(true)
+      if (result.status === 200) {
+        toast.success(result.message, {autoClose: 2000})
+      } else {
+        toast.error(result.message, {autoClose: 2000})
+      }
   }
 
   // Affichage du forum
@@ -191,7 +202,7 @@ export default function Posts() {
               {commentToEdit === null &&
                 post.comments.map((comment) => {
                   return (
-                    <div key={comment.id}>
+                    <div className="comment" key={comment.id}>
                       <p>
                         {comment.userFirstName} {comment.userLastName} a répondu
                         :

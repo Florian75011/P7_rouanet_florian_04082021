@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useHistory } from 'react-router'
 import { fetchPost } from '../utils/fetch'
 import { isValidEmail, isValidPassword } from '../utils/validation'
+import { toast } from 'react-toastify'
 
 export default function Login() {
   // Variables contenants nos champs et nos erreurs
@@ -62,10 +63,13 @@ export default function Login() {
       // Envoie serveur:
       const result = await fetchPost('/api/auth/login', body)
       if (result.status === 200) {
+        toast.success(result.message, {autoClose: 2000})
         localStorage.setItem('accessToken', result.token)
         localStorage.setItem('userId', result.userId)
         localStorage.setItem('userRole', result.userRole)
         history.push('/')
+      } else {
+        toast.error(result.message, {autoClose: 2000})
       }
     }
   }

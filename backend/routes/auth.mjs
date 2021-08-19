@@ -64,12 +64,9 @@ export async function signUp(req, res, next) {
       if (searchUser === null) {
         const hash = await bcrypt.hash(password, 10) // Hashé le MDP côté backend pour ne rien stocker dans la dataBase
         const result = await createUser(firstName, lastName, email, hash)
-        // res.status(201).json({
-        //   data: result,
-        //   message: "Inscription de l'utilisateur réussie",
-        // }) // 201 dit que le compte est créé avec succès
         const obj = {
           userId: result, // Basculer sur logIn après inscription
+          message: 'Vous avez crée un compte !',
           token: jwt.sign(
             { userId: result, userRole: 'result.role' },
             process.env.TOKEN_SECRET,
@@ -105,6 +102,7 @@ export async function logIn(req, res, next) {
         const obj = {
           userId: searchUser.id,
           userRole: searchUser.role, // Envoie user et role
+          message: 'Vous êtes connecté !',
           token: jwt.sign(
             { userId: searchUser.id, userRole: searchUser.role },
             process.env.TOKEN_SECRET,

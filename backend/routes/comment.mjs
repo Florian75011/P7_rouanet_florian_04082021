@@ -7,7 +7,7 @@ export async function commentCreate(req, res, next) {
     const { userId, postId, text } = req.body
     if (text) {
       const result = await createComment(userId, postId, text)
-      res.status(201).json({ data: result, message: "C'est fonctionnel" })
+      res.status(201).json({ data: result, message: "Commentaire crée" })
     } else {
       errorHandler(req, res, 400)
     }

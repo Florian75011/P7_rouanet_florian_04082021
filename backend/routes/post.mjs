@@ -57,7 +57,7 @@ export async function postCreate(req, res, next) {
     const { userId, title, text, image } = body
     if (title && text) {
       const result = await createPost(userId, title, text, image)
-      res.status(201).json({ data: result, message: "C'est fonctionnel" })
+      res.status(201).json({ data: result, message: "Message crée" })
     } else {
       errorHandler(req, res, 400)
     }

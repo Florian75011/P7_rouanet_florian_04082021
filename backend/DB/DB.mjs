@@ -14,7 +14,7 @@ const pool = mysql2.createPool({
   queueLimit: 0,
 })
 
-// Promesse retournée pour gèrer l'asynchrone en connexions simultanées à partir d'une seule
+// Promesse retournée pour gèrer l'asynchrone avec MYSQL/Node.js en connexions simultanées à partir d'une seule
 export function sqlQuery(str) {
   return new Promise(async (resolve, reject) => {
     pool.query(str, function (err, results, fields) {
