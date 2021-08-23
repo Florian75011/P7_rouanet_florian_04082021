@@ -87,7 +87,7 @@ export default function Profile() {
     e.preventDefault()
     // Alert pour prévenir de la suppression
     if (!window.confirm(
-      'Êtes-vous sûr de vouloir supprimer cette publication ?'
+      'Êtes-vous sûr de vouloir supprimer votre profil ?'
     )) {
       return
     }
